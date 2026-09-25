@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deadlock Optimizer</title>
+<link rel="stylesheet" href="style.css?v=20260926">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Deadlock <span>Build Optimizer</span></h1>
+    <p class="sub" id="meta">loading…</p>
+  </div>
+</header>
+
+<div id="recalcNotice" style="background:#123f32;color:#d8ffef;border-bottom:1px solid #37a77c;padding:10px 18px;text-align:center;font-weight:700">loading…</div>
+
+<nav><div class="wrap">
+  <button data-tab="answer" class="on">The Answer</button>
+  <button data-tab="rank">Rankings</button>
+  <button data-tab="builds">All Builds</button>
+  <button data-tab="build" id="buildTabBtn" style="display:none">Hero Build</button>
+  <button data-tab="lab">Build Lab</button>
+  <button data-tab="heroes">Heroes</button>
+  <button data-tab="items">Items</button>
+  <button data-tab="pro">Pro Evidence</button>
+  <button data-tab="method">Method</button>
+</div></nav>
+
+<main class="wrap">
+
+<section id="answer" class="tab on">
+  <div id="answerBody"></div>
+</section>
+
+<section id="pro" class="tab">
+  <div id="proBody"></div>
+</section>
+
+<section id="rank" class="tab">
+  <h2>Hero rankings</h2>
+  <p class="note">Score is the weighted geometric mean of combat scenarios (time-to-die ÷ time-to-kill) against a
+  self-consistent median opponent, with every hero's build solved independently at every stage. <b>Teamfight</b> uses only the
+  teamfight scenarios; <b>All-round</b> adds picks and skirmishes. Win-rate columns are patch-current ranked match data.
+  Click a hero for its build and purchase order.</p>
+  <div class="controls">
+    <label>Objective <select id="rankObj"><option value="teamfight" selected>Teamfight</option><option value="allround">All-round</option></select></label>
+    <label>Stage
+      <select id="rankStage">
+        <option value="overall" selected>Weighted overall</option>
+        <option value="laning">Laning (6k)</option>
+        <option value="early">Early (12k)</option>
+        <option value="mid">Mid (20k)</option>
+        <option value="late">Late (32k)</option>
+        <option value="full">Full (50k)</option>
+      </select>
+    </label>
+  </div>
+  <div id="refBox" class="refbox"></div>
+  <div class="tablewrap"><table id="rankTable"></table></div>
+</section>
+
+<section id="builds" class="tab">
+  <h2>Optimal build for every hero</h2>
+  <p class="note">Each hero's build solved independently at each stage: 9 slots of any category plus one per enemy Walker (9/9/10/11/12 by stage), at most 4 actives,
+  ability upgrades limited to the <b>legal points available at that stage</b> (8/15/21/26/32).</p>
+  <div class="controls">
+    <label>Objective <select id="bObj"><option value="teamfight" selected>Teamfight</option><option value="allround">All-round</option></select></label>
+    <label>Stage <select id="bStage">
+      <option value="laning">Laning (6k)</option><option value="early">Early (12k)</option>
+      <option value="mid" selected>Mid (20k)</option><option value="late">Late (32k)</option>
+      <option value="full">Full (50k)</option></select></label>
+    <label>Sort <select id="bSort">
+      <option value="score">Score</option><option value="hero">Hero name</option>
+      <option value="dps">DPS</option><option value="heal">Healing</option></select></label>
+    <label>Filter <input type="text" id="bFilter" placeholder="hero or item…"></label>
+  </div>
+  <div id="buildList"></div>
+</section>
+
+<section id="build" class="tab"><div id="buildBody"></div></section>
+
+<section id="heroes" class="tab">
+  <h2>Hero stat browser</h2>
+  <div class="controls">
+    <label>Hero <select id="heroSel"></select></label>
+    <label>Net worth <input type="range" id="heroNW" min="0" max="60000" step="500" value="32000"></label>
+    <span class="pill" id="heroNWval">32,000</span>
+  </div>
+  <div id="heroDetail"></div>
+</section>
+
+<section id="items" class="tab">
+  <h2>Item browser</h2>
+  <div class="controls">
+    <label>Category <select id="itemSlot">
+      <option value="">all</option><option>weapon</option><option>vitality</option><option>spirit</option>
+    </select></label>
+    <label>Tier <select id="itemTier">
+      <option value="">all</option><option>1</option><option>2</option><option>3</option><option>4</option>
+    </select></label>
+    <label>Search <input type="text" id="itemSearch" placeholder="name or stat…"></label>
+  </div>
+  <div id="itemList" class="itemgrid"></div>
+</section>
+
+<section id="lab" class="tab">
+  <h2>Build Lab</h2>
+  <p class="note">Pick a hero and net worth, then click items to add them. Every build is scored by the <b>same Python model</b>
+  that produced the rankings (via <code>scripts/serve.py</code>) against a median opponent at that net worth.
+  <b>Optimise this build</b> searches for the best build from where you are, for any net worth.</p>
+  <div class="controls">
+    <label>Hero <select id="labHero"></select></label>
+    <label>Net worth <input type="number" id="labNW" value="32000" step="1000" min="0"></label>
+    <label>Objective <select id="labObj"><option value="teamfight" selected>Teamfight</option><option value="allround">All-round</option></select></label>
+    <button id="labClear" class="btn">Clear</button>
+    <button id="labOptimal" class="btn">Load solved build</button>
+    <button id="labOpt" class="btn primary">Optimise this build</button>
+  </div>
+  <div class="labgrid">
+    <div>
+      <h3>Build <span id="labCount" class="pill"></span></h3>
+      <div id="labBuild" class="buildlist"></div>
+      <h3>Shop</h3>
+      <input type="text" id="labSearch" placeholder="filter items…">
+      <div id="labShop" class="shoplist"></div>
+    </div>
+    <div>
+      <h3>Model result</h3>
+      <div id="labStats"></div>
+    </div>
+  </div>
+</section>
+
+<section id="method" class="tab">
+  <h2>Method &amp; caveats</h2>
+  <div id="methodBody"></div>
+</section>
+
+</main>
+<script src="app.js?v=20260926"></script>
+</body>
+</html>

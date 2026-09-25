@@ -1,0 +1,1044 @@
+{
+ "meta": {
+  "name": "pro-leaning evidence index",
+  "patch": "Minor Update 09-16-2026",
+  "fetched_at": "2026-09-20T19:00:59.649766+00:00",
+  "rank_filter": "Ascendant 1+",
+  "match_mode": "ranked",
+  "prior_matches": 500,
+  "weights": {
+   "combat": 0.35,
+   "high_skill_outcome": 0.4,
+   "draft_priority": 0.15,
+   "macro_breadth": 0.1
+  },
+  "sensitivity_profiles": {
+   "balanced": {
+    "combat": 0.35,
+    "high_skill_outcome": 0.4,
+    "draft_priority": 0.15,
+    "macro_breadth": 0.1
+   },
+   "outcome_heavy": {
+    "combat": 0.2,
+    "high_skill_outcome": 0.55,
+    "draft_priority": 0.15,
+    "macro_breadth": 0.1
+   },
+   "model_heavy": {
+    "combat": 0.5,
+    "high_skill_outcome": 0.3,
+    "draft_priority": 0.1,
+    "macro_breadth": 0.1
+   },
+   "draft_heavy": {
+    "combat": 0.25,
+    "high_skill_outcome": 0.35,
+    "draft_priority": 0.3,
+    "macro_breadth": 0.1
+   }
+  },
+  "source_urls": [
+   "https://api.deadlock-api.com/v1/analytics/hero-stats?bucket=no_bucket&game_mode=normal&match_mode=ranked&min_unix_timestamp=1789589803&min_average_badge=101",
+   "https://api.deadlock-api.com/v1/analytics/hero-ban-stats?bucket=no_bucket&match_mode=ranked&min_unix_timestamp=1789589803&min_average_badge=101"
+  ],
+  "warning": "High-skill ranked evidence, not a tournament draft model. Percentile components are intentionally small and auditable."
+ },
+ "sample": {
+  "global_win_rate": 50.0,
+  "player_hero_appearances": 29964,
+  "estimated_matches": 2497.0,
+  "total_bans": 495,
+  "combat_outcome_spearman": 0.1878761352445563
+ },
+ "ranking": [
+  {
+   "hero": "Celeste",
+   "score": 82.45270270270271,
+   "combat_score": 1.853470134939117,
+   "components": {
+    "combat": 78.37837837837837,
+    "high_skill_outcome": 97.2972972972973,
+    "draft_priority": 59.5945945945946,
+    "macro_breadth": 71.62162162162161
+   },
+   "matches": 630,
+   "wins": 344,
+   "raw_win_rate": 54.6031746031746,
+   "adjusted_win_rate": 52.56637168141592,
+   "pick_share": 2.10252302763316,
+   "ban_share": 13.131313131313133,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3779506178162435,
+    "boss_damage_per_1k_networth": 251.71498637163614,
+    "farm_damage_per_1k_networth": 1686.572899831536,
+    "player_damage_per_1k_networth": 1058.3660999645192
+   },
+   "rank": 1,
+   "sensitivity_rank_min": 1,
+   "sensitivity_rank_max": 1
+  },
+  {
+   "hero": "Mo & Krill",
+   "score": 79.97972972972973,
+   "combat_score": 2.11210305825835,
+   "components": {
+    "combat": 83.78378378378379,
+    "high_skill_outcome": 89.1891891891892,
+    "draft_priority": 75.54054054054053,
+    "macro_breadth": 36.48648648648649
+   },
+   "matches": 957,
+   "wins": 498,
+   "raw_win_rate": 52.03761755485894,
+   "adjusted_win_rate": 51.33836650652025,
+   "pick_share": 3.1938325991189425,
+   "ban_share": 2.8282828282828283,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4597213497281231,
+    "boss_damage_per_1k_networth": 143.8737809767256,
+    "farm_damage_per_1k_networth": 1185.6136347690106,
+    "player_damage_per_1k_networth": 825.0044022844374
+   },
+   "rank": 2,
+   "sensitivity_rank_min": 2,
+   "sensitivity_rank_max": 3
+  },
+  {
+   "hero": "Vyper",
+   "score": 77.0945945945946,
+   "combat_score": 1.4043392906213392,
+   "components": {
+    "combat": 67.56756756756756,
+    "high_skill_outcome": 100.0,
+    "draft_priority": 52.7027027027027,
+    "macro_breadth": 55.4054054054054
+   },
+   "matches": 610,
+   "wins": 353,
+   "raw_win_rate": 57.868852459016395,
+   "adjusted_win_rate": 54.32432432432432,
+   "pick_share": 2.0357762648511546,
+   "ban_share": 5.05050505050505,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.27986815486551114,
+    "boss_damage_per_1k_networth": 412.9411167252595,
+    "farm_damage_per_1k_networth": 1782.2780547648422,
+    "player_damage_per_1k_networth": 866.0765899228343
+   },
+   "rank": 3,
+   "sensitivity_rank_min": 2,
+   "sensitivity_rank_max": 5
+  },
+  {
+   "hero": "Dynamo",
+   "score": 75.05743243243244,
+   "combat_score": 1.578778159941626,
+   "components": {
+    "combat": 75.67567567567568,
+    "high_skill_outcome": 91.8918918918919,
+    "draft_priority": 51.28378378378378,
+    "macro_breadth": 41.21621621621622
+   },
+   "matches": 646,
+   "wins": 344,
+   "raw_win_rate": 53.25077399380805,
+   "adjusted_win_rate": 51.832460732984295,
+   "pick_share": 2.155920437858764,
+   "ban_share": 2.6262626262626263,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4952100356657435,
+    "boss_damage_per_1k_networth": 154.47676269872116,
+    "farm_damage_per_1k_networth": 1351.721683847928,
+    "player_damage_per_1k_networth": 594.844429911556
+   },
+   "rank": 4,
+   "sensitivity_rank_min": 4,
+   "sensitivity_rank_max": 6
+  },
+  {
+   "hero": "Yamato",
+   "score": 74.69594594594595,
+   "combat_score": 2.3200856841831614,
+   "components": {
+    "combat": 89.1891891891892,
+    "high_skill_outcome": 72.97297297297297,
+    "draft_priority": 58.78378378378379,
+    "macro_breadth": 54.72972972972973
+   },
+   "matches": 992,
+   "wins": 509,
+   "raw_win_rate": 51.31048387096774,
+   "adjusted_win_rate": 50.87131367292225,
+   "pick_share": 3.3106394339874514,
+   "ban_share": 0.6060606060606061,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3997042646012099,
+    "boss_damage_per_1k_networth": 196.25236656536043,
+    "farm_damage_per_1k_networth": 1371.0388619627768,
+    "player_damage_per_1k_networth": 973.1171957958567
+   },
+   "rank": 5,
+   "sensitivity_rank_min": 3,
+   "sensitivity_rank_max": 5
+  },
+  {
+   "hero": "Lash",
+   "score": 68.1418918918919,
+   "combat_score": 1.1974380611100177,
+   "components": {
+    "combat": 54.054054054054056,
+    "high_skill_outcome": 75.67567567567568,
+    "draft_priority": 92.56756756756758,
+    "macro_breadth": 50.67567567567568
+   },
+   "matches": 1606,
+   "wins": 822,
+   "raw_win_rate": 51.18306351183064,
+   "adjusted_win_rate": 50.902184235517566,
+   "pick_share": 5.359765051395008,
+   "ban_share": 4.242424242424243,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4391874344253306,
+    "boss_damage_per_1k_networth": 133.07988722534992,
+    "farm_damage_per_1k_networth": 1399.6532381179632,
+    "player_damage_per_1k_networth": 952.9945156524765
+   },
+   "rank": 6,
+   "sensitivity_rank_min": 4,
+   "sensitivity_rank_max": 11
+  },
+  {
+   "hero": "Victor",
+   "score": 66.5608108108108,
+   "combat_score": 2.1705121978228723,
+   "components": {
+    "combat": 86.48648648648648,
+    "high_skill_outcome": 64.86486486486487,
+    "draft_priority": 30.675675675675677,
+    "macro_breadth": 57.432432432432435
+   },
+   "matches": 591,
+   "wins": 300,
+   "raw_win_rate": 50.76142131979695,
+   "adjusted_win_rate": 50.41246562786434,
+   "pick_share": 1.97236684020825,
+   "ban_share": 1.2121212121212122,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.30335069293170897,
+    "boss_damage_per_1k_networth": 283.0924628519354,
+    "farm_damage_per_1k_networth": 1848.7874401086094,
+    "player_damage_per_1k_networth": 901.6926891060239
+   },
+   "rank": 7,
+   "sensitivity_rank_min": 6,
+   "sensitivity_rank_max": 12
+  },
+  {
+   "hero": "Drifter",
+   "score": 63.39864864864865,
+   "combat_score": 4.099920356952647,
+   "components": {
+    "combat": 100.0,
+    "high_skill_outcome": 27.027027027027028,
+    "draft_priority": 87.97297297297297,
+    "macro_breadth": 43.91891891891892
+   },
+   "matches": 1377,
+   "wins": 669,
+   "raw_win_rate": 48.5838779956427,
+   "adjusted_win_rate": 48.961108151305275,
+   "pick_share": 4.595514617541049,
+   "ban_share": 3.2323232323232323,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.47510968442720986,
+    "boss_damage_per_1k_networth": 101.79721673430683,
+    "farm_damage_per_1k_networth": 1016.8100760938852,
+    "player_damage_per_1k_networth": 1011.8579149042819
+   },
+   "rank": 8,
+   "sensitivity_rank_min": 7,
+   "sensitivity_rank_max": 20
+  },
+  {
+   "hero": "Viscous",
+   "score": 63.25675675675676,
+   "combat_score": 2.827210366078887,
+   "components": {
+    "combat": 94.5945945945946,
+    "high_skill_outcome": 54.054054054054056,
+    "draft_priority": 19.45945945945946,
+    "macro_breadth": 56.08108108108108
+   },
+   "matches": 445,
+   "wins": 224,
+   "raw_win_rate": 50.337078651685395,
+   "adjusted_win_rate": 50.15873015873016,
+   "pick_share": 1.485115471899613,
+   "ban_share": 1.4141414141414141,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4363729601510816,
+    "boss_damage_per_1k_networth": 137.06340745174265,
+    "farm_damage_per_1k_networth": 1440.1881244011163,
+    "player_damage_per_1k_networth": 986.0485241748128
+   },
+   "rank": 9,
+   "sensitivity_rank_min": 8,
+   "sensitivity_rank_max": 17
+  },
+  {
+   "hero": "Kelvin",
+   "score": 62.02702702702703,
+   "combat_score": 2.497087169572758,
+   "components": {
+    "combat": 91.8918918918919,
+    "high_skill_outcome": 56.75675675675676,
+    "draft_priority": 22.972972972972972,
+    "macro_breadth": 37.16216216216216
+   },
+   "matches": 462,
+   "wins": 233,
+   "raw_win_rate": 50.43290043290043,
+   "adjusted_win_rate": 50.2079002079002,
+   "pick_share": 1.5418502202643172,
+   "ban_share": 1.4141414141414141,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.47629131976882,
+    "boss_damage_per_1k_networth": 141.16113177834248,
+    "farm_damage_per_1k_networth": 1236.1827768388662,
+    "player_damage_per_1k_networth": 773.0379955936916
+   },
+   "rank": 10,
+   "sensitivity_rank_min": 9,
+   "sensitivity_rank_max": 18
+  },
+  {
+   "hero": "Ivy",
+   "score": 60.736486486486484,
+   "combat_score": 1.0893458129619815,
+   "components": {
+    "combat": 45.94594594594595,
+    "high_skill_outcome": 78.37837837837837,
+    "draft_priority": 51.75675675675676,
+    "macro_breadth": 55.40540540540541
+   },
+   "matches": 865,
+   "wins": 445,
+   "raw_win_rate": 51.445086705202314,
+   "adjusted_win_rate": 50.91575091575091,
+   "pick_share": 2.8867974903217193,
+   "ban_share": 1.2121212121212122,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4328262789394449,
+    "boss_damage_per_1k_networth": 257.85980600987585,
+    "farm_damage_per_1k_networth": 1545.8955463508057,
+    "player_damage_per_1k_networth": 716.0283212159151
+   },
+   "rank": 11,
+   "sensitivity_rank_min": 9,
+   "sensitivity_rank_max": 15
+  },
+  {
+   "hero": "Paige",
+   "score": 59.85472972972973,
+   "combat_score": 1.0305116568498527,
+   "components": {
+    "combat": 29.72972972972973,
+    "high_skill_outcome": 94.5945945945946,
+    "draft_priority": 44.52702702702703,
+    "macro_breadth": 49.32432432432433
+   },
+   "matches": 889,
+   "wins": 477,
+   "raw_win_rate": 53.655793025871766,
+   "adjusted_win_rate": 52.339812814974806,
+   "pick_share": 2.9668936056601254,
+   "ban_share": 0.40404040404040403,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.5040708746578892,
+    "boss_damage_per_1k_networth": 156.76656593672956,
+    "farm_damage_per_1k_networth": 1484.8210748716601,
+    "player_damage_per_1k_networth": 736.7119416165364
+   },
+   "rank": 12,
+   "sensitivity_rank_min": 7,
+   "sensitivity_rank_max": 17
+  },
+  {
+   "hero": "Bebop",
+   "score": 58.435810810810814,
+   "combat_score": 1.5038284370758523,
+   "components": {
+    "combat": 70.27027027027027,
+    "high_skill_outcome": 40.54054054054054,
+    "draft_priority": 90.47297297297298,
+    "macro_breadth": 40.54054054054055
+   },
+   "matches": 1348,
+   "wins": 665,
+   "raw_win_rate": 49.332344213649854,
+   "adjusted_win_rate": 49.51298701298701,
+   "pick_share": 4.498731811507142,
+   "ban_share": 5.05050505050505,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4812027679902479,
+    "boss_damage_per_1k_networth": 103.56155636865486,
+    "farm_damage_per_1k_networth": 1091.5066785117888,
+    "player_damage_per_1k_networth": 911.4652282500799
+   },
+   "rank": 13,
+   "sensitivity_rank_min": 9,
+   "sensitivity_rank_max": 18
+  },
+  {
+   "hero": "Seven",
+   "score": 58.13851351351351,
+   "combat_score": 1.5405939352929667,
+   "components": {
+    "combat": 72.97297297297297,
+    "high_skill_outcome": 51.35135135135135,
+    "draft_priority": 42.0945945945946,
+    "macro_breadth": 57.432432432432435
+   },
+   "matches": 666,
+   "wins": 334,
+   "raw_win_rate": 50.150150150150154,
+   "adjusted_win_rate": 50.08576329331046,
+   "pick_share": 2.222667200640769,
+   "ban_share": 1.2121212121212122,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.31439048817108073,
+    "boss_damage_per_1k_networth": 271.6477270093332,
+    "farm_damage_per_1k_networth": 2341.2865889588384,
+    "player_damage_per_1k_networth": 837.4369389368112
+   },
+   "rank": 14,
+   "sensitivity_rank_min": 12,
+   "sensitivity_rank_max": 17
+  },
+  {
+   "hero": "Warden",
+   "score": 58.054054054054056,
+   "combat_score": 3.825877060583241,
+   "components": {
+    "combat": 97.2972972972973,
+    "high_skill_outcome": 29.72972972972973,
+    "draft_priority": 41.08108108108108,
+    "macro_breadth": 59.45945945945947
+   },
+   "matches": 453,
+   "wins": 219,
+   "raw_win_rate": 48.34437086092716,
+   "adjusted_win_rate": 49.21301154249738,
+   "pick_share": 1.511814177012415,
+   "ban_share": 10.707070707070706,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.30468624353811496,
+    "boss_damage_per_1k_networth": 309.2386044564208,
+    "farm_damage_per_1k_networth": 1943.9140100398345,
+    "player_damage_per_1k_networth": 870.5998261432715
+   },
+   "rank": 15,
+   "sensitivity_rank_min": 10,
+   "sensitivity_rank_max": 24
+  },
+  {
+   "hero": "Vindicta",
+   "score": 57.7972972972973,
+   "combat_score": 0.9886951880662426,
+   "components": {
+    "combat": 21.62162162162162,
+    "high_skill_outcome": 83.78378378378379,
+    "draft_priority": 71.35135135135135,
+    "macro_breadth": 60.13513513513514
+   },
+   "matches": 912,
+   "wins": 471,
+   "raw_win_rate": 51.64473684210527,
+   "adjusted_win_rate": 51.06232294617564,
+   "pick_share": 3.0436523828594315,
+   "ban_share": 3.4343434343434343,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.41197863828061465,
+    "boss_damage_per_1k_networth": 201.2194506523301,
+    "farm_damage_per_1k_networth": 1195.4013763817877,
+    "player_damage_per_1k_networth": 1119.602659296113
+   },
+   "rank": 16,
+   "sensitivity_rank_min": 8,
+   "sensitivity_rank_max": 21
+  },
+  {
+   "hero": "Wraith",
+   "score": 57.4527027027027,
+   "combat_score": 1.0420322273555442,
+   "components": {
+    "combat": 32.432432432432435,
+    "high_skill_outcome": 67.56756756756756,
+    "draft_priority": 89.32432432432432,
+    "macro_breadth": 56.75675675675676
+   },
+   "matches": 1108,
+   "wins": 562,
+   "raw_win_rate": 50.722021660649816,
+   "adjusted_win_rate": 50.49751243781094,
+   "pick_share": 3.697770658123081,
+   "ban_share": 7.07070707070707,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.2625899130225853,
+    "boss_damage_per_1k_networth": 379.22294585981155,
+    "farm_damage_per_1k_networth": 2035.532564790312,
+    "player_damage_per_1k_networth": 849.3879659963729
+   },
+   "rank": 17,
+   "sensitivity_rank_min": 8,
+   "sensitivity_rank_max": 19
+  },
+  {
+   "hero": "Holliday",
+   "score": 53.26013513513514,
+   "combat_score": 1.1349674805921475,
+   "components": {
+    "combat": 48.64864864864865,
+    "high_skill_outcome": 62.16216216216216,
+    "draft_priority": 49.66216216216216,
+    "macro_breadth": 39.18918918918919
+   },
+   "matches": 666,
+   "wins": 337,
+   "raw_win_rate": 50.6006006006006,
+   "adjusted_win_rate": 50.34305317324185,
+   "pick_share": 2.222667200640769,
+   "ban_share": 1.8181818181818181,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.444679644814619,
+    "boss_damage_per_1k_networth": 118.33712941536982,
+    "farm_damage_per_1k_networth": 1174.5121508439054,
+    "player_damage_per_1k_networth": 923.4609312473899
+   },
+   "rank": 18,
+   "sensitivity_rank_min": 16,
+   "sensitivity_rank_max": 21
+  },
+  {
+   "hero": "Abrams",
+   "score": 52.57094594594595,
+   "combat_score": 1.3508325670214252,
+   "components": {
+    "combat": 64.86486486486487,
+    "high_skill_outcome": 48.64864864864865,
+    "draft_priority": 41.013513513513516,
+    "macro_breadth": 42.567567567567565
+   },
+   "matches": 852,
+   "wins": 422,
+   "raw_win_rate": 49.53051643192488,
+   "adjusted_win_rate": 49.70414201183432,
+   "pick_share": 2.843412094513416,
+   "ban_share": 0.40404040404040403,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.42520892422508527,
+    "boss_damage_per_1k_networth": 172.9151207450798,
+    "farm_damage_per_1k_networth": 1431.3951195727327,
+    "player_damage_per_1k_networth": 756.4275256417601
+   },
+   "rank": 19,
+   "sensitivity_rank_min": 16,
+   "sensitivity_rank_max": 23
+  },
+  {
+   "hero": "Billy",
+   "score": 52.476351351351354,
+   "combat_score": 1.0150833191217221,
+   "components": {
+    "combat": 27.027027027027028,
+    "high_skill_outcome": 81.08108108108108,
+    "draft_priority": 38.58108108108108,
+    "macro_breadth": 47.972972972972975
+   },
+   "matches": 715,
+   "wins": 369,
+   "raw_win_rate": 51.608391608391614,
+   "adjusted_win_rate": 50.946502057613166,
+   "pick_share": 2.3861967694566815,
+   "ban_share": 0.6060606060606061,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.42796313783908835,
+    "boss_damage_per_1k_networth": 175.56832323902762,
+    "farm_damage_per_1k_networth": 1435.6035888309777,
+    "player_damage_per_1k_networth": 831.8048935553365
+   },
+   "rank": 20,
+   "sensitivity_rank_min": 12,
+   "sensitivity_rank_max": 24
+  },
+  {
+   "hero": "Apollo",
+   "score": 52.01013513513513,
+   "combat_score": 1.9882662842086474,
+   "components": {
+    "combat": 81.08108108108108,
+    "high_skill_outcome": 35.13513513513514,
+    "draft_priority": 35.47297297297297,
+    "macro_breadth": 42.56756756756757
+   },
+   "matches": 502,
+   "wins": 244,
+   "raw_win_rate": 48.60557768924303,
+   "adjusted_win_rate": 49.30139720558882,
+   "pick_share": 1.6753437458283271,
+   "ban_share": 2.6262626262626263,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4064928070685803,
+    "boss_damage_per_1k_networth": 160.58279761808035,
+    "farm_damage_per_1k_networth": 1291.5880364772363,
+    "player_damage_per_1k_networth": 906.7518432365983
+   },
+   "rank": 21,
+   "sensitivity_rank_min": 14,
+   "sensitivity_rank_max": 26
+  },
+  {
+   "hero": "McGinnis",
+   "score": 49.95945945945946,
+   "combat_score": 0.985398034541136,
+   "components": {
+    "combat": 18.91891891891892,
+    "high_skill_outcome": 86.48648648648648,
+    "draft_priority": 15.945945945945944,
+    "macro_breadth": 63.513513513513516
+   },
+   "matches": 418,
+   "wins": 220,
+   "raw_win_rate": 52.63157894736842,
+   "adjusted_win_rate": 51.19825708061002,
+   "pick_share": 1.3950073421439062,
+   "ban_share": 1.4141414141414141,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4131356422077297,
+    "boss_damage_per_1k_networth": 240.2354775461788,
+    "farm_damage_per_1k_networth": 1507.4650021744496,
+    "player_damage_per_1k_networth": 908.7534929762055
+   },
+   "rank": 22,
+   "sensitivity_rank_min": 13,
+   "sensitivity_rank_max": 25
+  },
+  {
+   "hero": "Shiv",
+   "score": 49.861486486486484,
+   "combat_score": 1.1596979902069724,
+   "components": {
+    "combat": 51.35135135135135,
+    "high_skill_outcome": 43.24324324324324,
+    "draft_priority": 72.5,
+    "macro_breadth": 37.16216216216216
+   },
+   "matches": 992,
+   "wins": 489,
+   "raw_win_rate": 49.29435483870967,
+   "adjusted_win_rate": 49.53083109919571,
+   "pick_share": 3.3106394339874514,
+   "ban_share": 1.8181818181818181,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.36889041219184593,
+    "boss_damage_per_1k_networth": 138.835151688501,
+    "farm_damage_per_1k_networth": 1193.9710436269834,
+    "player_damage_per_1k_networth": 973.7549756329357
+   },
+   "rank": 23,
+   "sensitivity_rank_min": 19,
+   "sensitivity_rank_max": 23
+  },
+  {
+   "hero": "Calico",
+   "score": 49.554054054054056,
+   "combat_score": 1.0587841273359673,
+   "components": {
+    "combat": 43.24324324324324,
+    "high_skill_outcome": 45.94594594594595,
+    "draft_priority": 83.51351351351352,
+    "macro_breadth": 35.13513513513514
+   },
+   "matches": 1135,
+   "wins": 562,
+   "raw_win_rate": 49.51541850220264,
+   "adjusted_win_rate": 49.66360856269113,
+   "pick_share": 3.787878787878788,
+   "ban_share": 3.0303030303030303,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4089379758464648,
+    "boss_damage_per_1k_networth": 160.28438279743375,
+    "farm_damage_per_1k_networth": 829.4484720010399,
+    "player_damage_per_1k_networth": 894.3244670703276
+   },
+   "rank": 24,
+   "sensitivity_rank_min": 14,
+   "sensitivity_rank_max": 24
+  },
+  {
+   "hero": "Haze",
+   "score": 44.5472972972973,
+   "combat_score": 0.690936179848331,
+   "components": {
+    "combat": 5.405405405405405,
+    "high_skill_outcome": 59.45945945945946,
+    "draft_priority": 93.37837837837837,
+    "macro_breadth": 48.64864864864865
+   },
+   "matches": 1697,
+   "wins": 855,
+   "raw_win_rate": 50.38302887448438,
+   "adjusted_win_rate": 50.29585798816568,
+   "pick_share": 5.6634628220531305,
+   "ban_share": 4.040404040404041,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3089002790348572,
+    "boss_damage_per_1k_networth": 197.40470397643836,
+    "farm_damage_per_1k_networth": 1843.7024000488743,
+    "player_damage_per_1k_networth": 864.7321653395046
+   },
+   "rank": 25,
+   "sensitivity_rank_min": 15,
+   "sensitivity_rank_max": 29
+  },
+  {
+   "hero": "Venator",
+   "score": 42.29391891891892,
+   "combat_score": 1.2244116439855954,
+   "components": {
+    "combat": 59.45945945945946,
+    "high_skill_outcome": 13.513513513513514,
+    "draft_priority": 65.74324324324324,
+    "macro_breadth": 62.16216216216216
+   },
+   "matches": 938,
+   "wins": 447,
+   "raw_win_rate": 47.6545842217484,
+   "adjusted_win_rate": 48.47009735744089,
+   "pick_share": 3.130423174476038,
+   "ban_share": 1.6161616161616161,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.31631262210131306,
+    "boss_damage_per_1k_networth": 229.33304581074515,
+    "farm_damage_per_1k_networth": 1969.7289387275764,
+    "player_damage_per_1k_networth": 924.3976137352045
+   },
+   "rank": 26,
+   "sensitivity_rank_min": 23,
+   "sensitivity_rank_max": 28
+  },
+  {
+   "hero": "Pocket",
+   "score": 40.98310810810811,
+   "combat_score": 1.0466126329038137,
+   "components": {
+    "combat": 37.83783783783784,
+    "high_skill_outcome": 37.83783783783784,
+    "draft_priority": 40.33783783783784,
+    "macro_breadth": 65.54054054054055
+   },
+   "matches": 785,
+   "wins": 385,
+   "raw_win_rate": 49.044585987261144,
+   "adjusted_win_rate": 49.416342412451364,
+   "pick_share": 2.619810439193699,
+   "ban_share": 0.6060606060606061,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.34099752119958915,
+    "boss_damage_per_1k_networth": 194.7764626778942,
+    "farm_damage_per_1k_networth": 1884.286168544345,
+    "player_damage_per_1k_networth": 1024.7567054186222
+   },
+   "rank": 27,
+   "sensitivity_rank_min": 27,
+   "sensitivity_rank_max": 28
+  },
+  {
+   "hero": "Paradox",
+   "score": 38.55405405405405,
+   "combat_score": 1.2078486413359797,
+   "components": {
+    "combat": 56.75675675675676,
+    "high_skill_outcome": 5.405405405405405,
+    "draft_priority": 69.18918918918918,
+    "macro_breadth": 61.48648648648649
+   },
+   "matches": 916,
+   "wins": 430,
+   "raw_win_rate": 46.943231441048034,
+   "adjusted_win_rate": 48.0225988700565,
+   "pick_share": 3.0570017354158323,
+   "ban_share": 2.4242424242424243,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4499600156484902,
+    "boss_damage_per_1k_networth": 161.92419030730017,
+    "farm_damage_per_1k_networth": 1313.3550677563128,
+    "player_damage_per_1k_networth": 1029.4178492438632
+   },
+   "rank": 28,
+   "sensitivity_rank_min": 26,
+   "sensitivity_rank_max": 29
+  },
+  {
+   "hero": "Rem",
+   "score": 38.11824324324325,
+   "combat_score": 0.9167784666293449,
+   "components": {
+    "combat": 13.513513513513514,
+    "high_skill_outcome": 70.27027027027027,
+    "draft_priority": 16.283783783783786,
+    "macro_breadth": 28.37837837837838
+   },
+   "matches": 534,
+   "wins": 276,
+   "raw_win_rate": 51.68539325842697,
+   "adjusted_win_rate": 50.870406189555126,
+   "pick_share": 1.7821385662795355,
+   "ban_share": 0.20202020202020202,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.5117748211703365,
+    "boss_damage_per_1k_networth": 119.53965888825064,
+    "farm_damage_per_1k_networth": 1066.4796381652138,
+    "player_damage_per_1k_networth": 497.7383757123707
+   },
+   "rank": 29,
+   "sensitivity_rank_min": 25,
+   "sensitivity_rank_max": 30
+  },
+  {
+   "hero": "Lady Geist",
+   "score": 35.45945945945946,
+   "combat_score": 1.2395045146309016,
+   "components": {
+    "combat": 62.16216216216216,
+    "high_skill_outcome": 8.108108108108109,
+    "draft_priority": 22.43243243243243,
+    "macro_breadth": 70.94594594594595
+   },
+   "matches": 610,
+   "wins": 287,
+   "raw_win_rate": 47.049180327868854,
+   "adjusted_win_rate": 48.37837837837838,
+   "pick_share": 2.0357762648511546,
+   "ban_share": 0.20202020202020202,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3090499472832347,
+    "boss_damage_per_1k_networth": 296.91203020559846,
+    "farm_damage_per_1k_networth": 2085.545140956117,
+    "player_damage_per_1k_networth": 976.8367704152581
+   },
+   "rank": 30,
+   "sensitivity_rank_min": 27,
+   "sensitivity_rank_max": 32
+  },
+  {
+   "hero": "Grey Talon",
+   "score": 29.523648648648653,
+   "combat_score": 1.0441138612265266,
+   "components": {
+    "combat": 35.13513513513514,
+    "high_skill_outcome": 24.324324324324326,
+    "draft_priority": 15.743243243243246,
+    "macro_breadth": 51.351351351351354
+   },
+   "matches": 481,
+   "wins": 230,
+   "raw_win_rate": 47.81704781704782,
+   "adjusted_win_rate": 48.92966360856269,
+   "pick_share": 1.6052596449072218,
+   "ban_share": 0.6060606060606061,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.36900582907590895,
+    "boss_damage_per_1k_networth": 144.93518045766044,
+    "farm_damage_per_1k_networth": 1392.4741565207585,
+    "player_damage_per_1k_networth": 1076.2249083992615
+   },
+   "rank": 31,
+   "sensitivity_rank_min": 30,
+   "sensitivity_rank_max": 33
+  },
+  {
+   "hero": "Sinclair",
+   "score": 23.91891891891892,
+   "combat_score": 0.9917966629966268,
+   "components": {
+    "combat": 24.324324324324326,
+    "high_skill_outcome": 16.216216216216218,
+    "draft_priority": 24.324324324324323,
+    "macro_breadth": 52.70270270270271
+   },
+   "matches": 421,
+   "wins": 197,
+   "raw_win_rate": 46.79334916864608,
+   "adjusted_win_rate": 48.534201954397396,
+   "pick_share": 1.4050193565612068,
+   "ban_share": 2.2222222222222223,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4504978983707687,
+    "boss_damage_per_1k_networth": 223.72817989657923,
+    "farm_damage_per_1k_networth": 1297.1358635670454,
+    "player_damage_per_1k_networth": 842.5262213515109
+   },
+   "rank": 32,
+   "sensitivity_rank_min": 32,
+   "sensitivity_rank_max": 36
+  },
+  {
+   "hero": "Silver",
+   "score": 23.597972972972975,
+   "combat_score": 0.9813335539027855,
+   "components": {
+    "combat": 16.216216216216218,
+    "high_skill_outcome": 18.91891891891892,
+    "draft_priority": 42.9054054054054,
+    "macro_breadth": 39.18918918918919
+   },
+   "matches": 645,
+   "wins": 307,
+   "raw_win_rate": 47.5968992248062,
+   "adjusted_win_rate": 48.646288209606986,
+   "pick_share": 2.1525830997196636,
+   "ban_share": 1.6161616161616161,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.4079552694501402,
+    "boss_damage_per_1k_networth": 129.2586584115516,
+    "farm_damage_per_1k_networth": 1287.4769025009662,
+    "player_damage_per_1k_networth": 946.4648127523528
+   },
+   "rank": 33,
+   "sensitivity_rank_min": 32,
+   "sensitivity_rank_max": 34
+  },
+  {
+   "hero": "Graves",
+   "score": 23.439189189189193,
+   "combat_score": 0.608438227063229,
+   "components": {
+    "combat": 2.7027027027027026,
+    "high_skill_outcome": 32.432432432432435,
+    "draft_priority": 26.08108108108108,
+    "macro_breadth": 56.08108108108108
+   },
+   "matches": 548,
+   "wins": 266,
+   "raw_win_rate": 48.54014598540146,
+   "adjusted_win_rate": 49.23664122137404,
+   "pick_share": 1.8288613002269387,
+   "ban_share": 0.8080808080808081,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3538108570501866,
+    "boss_damage_per_1k_networth": 232.84431299574308,
+    "farm_damage_per_1k_networth": 1785.319747126291,
+    "player_damage_per_1k_networth": 850.2032525274466
+   },
+   "rank": 34,
+   "sensitivity_rank_min": 31,
+   "sensitivity_rank_max": 36
+  },
+  {
+   "hero": "Infernus",
+   "score": 23.16216216216216,
+   "combat_score": 0.7817788111569299,
+   "components": {
+    "combat": 8.108108108108109,
+    "high_skill_outcome": 21.62162162162162,
+    "draft_priority": 45.40540540540541,
+    "macro_breadth": 48.648648648648646
+   },
+   "matches": 836,
+   "wins": 400,
+   "raw_win_rate": 47.84688995215311,
+   "adjusted_win_rate": 48.65269461077844,
+   "pick_share": 2.7900146842878124,
+   "ban_share": 0.8080808080808081,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3335070388304594,
+    "boss_damage_per_1k_networth": 229.76605749492245,
+    "farm_damage_per_1k_networth": 1664.616616122344,
+    "player_damage_per_1k_networth": 837.4944834334528
+   },
+   "rank": 35,
+   "sensitivity_rank_min": 31,
+   "sensitivity_rank_max": 35
+  },
+  {
+   "hero": "The Doorman",
+   "score": 22.256756756756754,
+   "combat_score": 1.0571854223374664,
+   "components": {
+    "combat": 40.54054054054054,
+    "high_skill_outcome": 0.0,
+    "draft_priority": 32.16216216216216,
+    "macro_breadth": 32.432432432432435
+   },
+   "matches": 289,
+   "wins": 124,
+   "raw_win_rate": 42.90657439446367,
+   "adjusted_win_rate": 47.40177439797212,
+   "pick_share": 0.9644907221999732,
+   "ban_share": 5.656565656565657,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.38421023218355427,
+    "boss_damage_per_1k_networth": 139.35874498852058,
+    "farm_damage_per_1k_networth": 1401.667922168098,
+    "player_damage_per_1k_networth": 806.8986167283317
+   },
+   "rank": 36,
+   "sensitivity_rank_min": 32,
+   "sensitivity_rank_max": 37
+  },
+  {
+   "hero": "Mina",
+   "score": 16.175675675675677,
+   "combat_score": 0.5199302243524544,
+   "components": {
+    "combat": 0.0,
+    "high_skill_outcome": 2.7027027027027026,
+    "draft_priority": 64.5945945945946,
+    "macro_breadth": 54.054054054054056
+   },
+   "matches": 915,
+   "wins": 426,
+   "raw_win_rate": 46.557377049180324,
+   "adjusted_win_rate": 47.773851590106005,
+   "pick_share": 3.053664397276732,
+   "ban_share": 1.8181818181818181,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3388921218996144,
+    "boss_damage_per_1k_networth": 185.7224136147703,
+    "farm_damage_per_1k_networth": 1744.4611422677506,
+    "player_damage_per_1k_networth": 922.8893345161289
+   },
+   "rank": 37,
+   "sensitivity_rank_min": 34,
+   "sensitivity_rank_max": 38
+  },
+  {
+   "hero": "Mirage",
+   "score": 15.141891891891891,
+   "combat_score": 0.8822438727002531,
+   "components": {
+    "combat": 10.81081081081081,
+    "high_skill_outcome": 10.81081081081081,
+    "draft_priority": 22.56756756756757,
+    "macro_breadth": 36.48648648648649
+   },
+   "matches": 512,
+   "wins": 240,
+   "raw_win_rate": 46.875,
+   "adjusted_win_rate": 48.418972332015805,
+   "pick_share": 1.7087171272193298,
+   "ban_share": 0.8080808080808081,
+   "macro_raw": {
+    "assists_per_1k_networth": 0.3311632025518544,
+    "boss_damage_per_1k_networth": 166.14948704976013,
+    "farm_damage_per_1k_networth": 1544.554913873721,
+    "player_damage_per_1k_networth": 800.5435229723731
+   },
+   "rank": 38,
+   "sensitivity_rank_min": 37,
+   "sensitivity_rank_max": 38
+  }
+ ]
+}

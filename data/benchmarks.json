@@ -1,0 +1,132 @@
+{
+ "cases": [
+  {
+   "id": "match_drifter_57k",
+   "label": "Enemy Drifter from your match \u2014 21 / 2 / 17, 93k player damage, 36k healing",
+   "note": "Scoreboard at 57k net worth. The 11 item icons were matched against the official shop art (correlation 0.70\u20130.95 each). It spends only 33.6k of 57k on items. It is a pick / stealth tempo build (Veil Walker invisibility, Stalker reveal, Kinetic Dash, Trophy Collector snowball): it wins by choosing fights, which this sustained-combat model does not price. In a drawn-out teamfight the model rates it far below a lifesteal + shred build.",
+   "hero": "Drifter",
+   "net_worth": 57000,
+   "items": [
+    "Stalker",
+    "Trophy Collector",
+    "Kinetic Dash",
+    "Fortitude",
+    "Veil Walker",
+    "Point Blank",
+    "Weighted Shots",
+    "Hollow Point",
+    "Hunter's Aura",
+    "Burst Fire",
+    "Vampiric Burst"
+   ],
+   "given": {
+    "items": [
+     "Burst Fire",
+     "Fortitude",
+     "Hollow Point",
+     "Hunter's Aura",
+     "Kinetic Dash",
+     "Point Blank",
+     "Stalker",
+     "Trophy Collector",
+     "Vampiric Burst",
+     "Veil Walker",
+     "Weighted Shots"
+    ],
+    "spend": 33600,
+    "teamfight": 0.3159212229518158,
+    "allround": 0.4668340867206705,
+    "tf_dps": 383.2340898510969,
+    "tf_splash": 7.704671287881944,
+    "tf_heal": 49.356858694805645,
+    "tf_ttk": 11.363160034286413,
+    "tf_ttd": 3.4513656309952685,
+    "ehp": 4481.481481481481,
+    "ability_levels": [
+     3,
+     3,
+     3,
+     3
+    ],
+    "scenarios": {
+     "teamfight": 0.3037329070946248,
+     "bullet_team": 0.3307708825694138,
+     "spirit_team": 0.339540197428229
+    }
+   },
+   "solved": {
+    "items": [
+     "Active Reload",
+     "Bullet Resilience",
+     "Crippling Headshot",
+     "Escalating Resilience",
+     "Frenzy",
+     "Fury Trance",
+     "Inhibitor",
+     "Lucky Shot",
+     "Ricochet",
+     "Sharpshooter",
+     "Spirit Resilience",
+     "Vampiric Burst"
+    ],
+    "spend": 56000,
+    "teamfight": 10.32383598158157,
+    "allround": 12.367566722279461,
+    "tf_dps": 973.0235481069905,
+    "tf_splash": 726.2327467873972,
+    "tf_heal": 406.9128401550155,
+    "tf_ttk": 3.2919643588373475,
+    "tf_ttd": 32.880109101751785,
+    "ehp": 8634.019578930196,
+    "ability_levels": [
+     3,
+     3,
+     3,
+     3
+    ],
+    "scenarios": {
+     "teamfight": 9.987990609158462,
+     "bullet_team": 10.549016563676643,
+     "spirit_team": 11.157300507384479
+    }
+   },
+   "solved_same_spend": {
+    "items": [
+     "Active Reload",
+     "Bullet Lifesteal",
+     "Bullet Resist Shredder",
+     "Escalating Resilience",
+     "Fury Trance",
+     "Inhibitor",
+     "Kinetic Dash",
+     "Long Range",
+     "Ricochet",
+     "Sharpshooter",
+     "Titanic Magazine",
+     "Weakening Headshot"
+    ],
+    "spend": 33600,
+    "teamfight": 2.2201591154825415,
+    "allround": 3.286664101928823,
+    "tf_dps": 879.0605226030142,
+    "tf_splash": 659.3024983148422,
+    "tf_heal": 240.26151201515276,
+    "tf_ttk": 3.639018914818495,
+    "tf_ttd": 7.420946633543655,
+    "ehp": 4961.256675760105,
+    "ability_levels": [
+     3,
+     3,
+     3,
+     3
+    ],
+    "scenarios": {
+     "teamfight": 2.039271245149269,
+     "bullet_team": 2.51165393195908,
+     "spirit_team": 2.532419900005003
+    }
+   },
+   "same_budget": "Held to the same 33,600 souls of items the player had, the best teamfight build scores 2.220 (7.03\u00d7 theirs): Active Reload, Bullet Lifesteal, Bullet Resist Shredder, Escalating Resilience, Fury Trance, Inhibitor, Kinetic Dash, Long Range, Ricochet, Sharpshooter, Titanic Magazine, Weakening Headshot."
+  }
+ ]
+}

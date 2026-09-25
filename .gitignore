@@ -1,0 +1,12 @@
+# local snapshot of the pre-2026-09-25 state and the one-off scripts
+archive/
+# byte-identical copies of data/heroes_raw.json and data/items_raw.json
+fresh_heroes.json
+fresh_items.json
+# run logs
+data/*.log
+__pycache__/
+*.pyc
+.claude/
+# profiler dumps
+*.out
