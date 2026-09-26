@@ -25,12 +25,17 @@ python scripts/pipeline.py --skip-solve # rebuild orders/docs/site from existing
 
 ```
 data/     raw game-file dumps, dataset.json, solver output (optimization.json,
-          orders.json, benchmarks.json), pro-evidence snapshot
+          orders.json, routes.json, niches.json, benchmarks.json), Ascendant+
+          item and pro-evidence snapshots
 docs/     FINDINGS.md (generated), HEROES.md, ITEMS.md, MECHANICS.md
 scripts/  extract.py     game files -> dataset.json
           model.py       the combat model (single source of truth)
           optimize.py    parallel per-hero solver, both objectives, reference fixed point
-          order_all.py   component-aware purchase orders
+          order_all.py   component-aware purchase orders for each stage build
+          route.py       full-game routes: buy, upgrade, SELL and ability order from
+                         0 souls to the final build, all abilities maxed
+          item_meta.py   Ascendant+ item usage snapshot (--refresh to refetch)
+          niches.py      counter builds, signature items, model vs real players
           benchmarks.py  real match builds vs the solver at equal souls
           pro_rank.py    pro-leaning evidence index (--refresh to refetch)
           findings.py    writes docs/FINDINGS.md from the results
@@ -40,9 +45,21 @@ scripts/  extract.py     game files -> dataset.json
           pipeline.py    runs all of the above in order
 verify/   test_model.py (mechanics regression tests), check_outputs.py
           (recomputes every published number; --deep proves local optimality)
-web/      the site: answer, rankings, all builds, build lab, heroes, items
+web/      the site: answer, rankings, all builds, hero routes, niches, build lab,
+          heroes, items, dark mode
 archive/  the pre-2026-09-25 state and the one-off scripts that hand-patched it
 ```
+
+## What you get per hero
+
+- **Full-game route** — what to buy, upgrade and sell, in order, with the net worth of every step:
+  early items are sold when a better one needs the slot or the souls (50% refund), the final
+  build is complete by 56k at the latest, and every ability ends at tier 3.
+- **Counter builds** vs gun-heavy and spirit-heavy teams and for isolated picks (32k and 50k).
+- **Signature items** (unusually strong on this hero) and **hidden gems / traps** versus what
+  Ascendant+ players actually buy this patch, with their average buy minute.
+- Stage builds for two objectives (teamfight, all-round) and a Build Lab that scores any build
+  with the same model.
 
 ## Model in one paragraph
 
@@ -60,7 +77,10 @@ with every maximum-spend tier allocation tried. Each scenario is one
 
 ## What is verified
 
-- 32 regression tests (`verify/test_model.py`) pin every corrected mechanic.
+- 35 regression tests (`verify/test_model.py`) pin every corrected mechanic and the route rules.
+- `verify/check_outputs.py` also replays all 76 full-game routes: souls never go negative, slots
+  never exceed what is unlocked, sells refund 50%, components exist before upgrades, and every
+  route ends on the solved full build with all abilities maxed.
 - Weapon DPS reproduces the shipped `damage_per_second_with_reload` for all 38 heroes.
 - Investments, multiplicative resist / lifesteal / cooldown pooling, falloff, stage ability points.
 - Item mechanics re-checked against deadlock.wiki on 2026-09-25: slot rules, Siphon Bullets,

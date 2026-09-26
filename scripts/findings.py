@@ -105,6 +105,62 @@ def main():
         w("")
         w("Winner per variant: " + ", ".join(f"{n} → {h}" for n, h in sens["winners"].items()) + ".\n")
 
+    routes = load("routes.json")
+    if routes and hero in routes:
+        R = routes[hero]["teamfight"]
+        w("### Full-game route — buy, sell and ability order\n")
+        w(f"Strongest at every stage, not just at the end: early items are sold when a better item needs the "
+          f"slot or the souls (50% refund). **{R['sells']} sells, {R['sell_loss']:,} souls lost, final build "
+          f"complete at {R['final_complete_at']:,} net worth, every ability at tier 3.** Across the game this route "
+          f"scores **{R['gain_vs_never_sell'] * 100:+.1f}%** against the best route that never sells.\n")
+        w("| net worth | step |\n|---:|---|")
+        for s in R["steps"]:
+            if s["kind"] == "ability":
+                w(f"| {s['at_net_worth']:,} | ability: {s['ability']} → tier {s['tier']} |")
+            elif s["kind"] == "sell":
+                w(f"| {s['at_net_worth']:,} | sell **{s['item']}** (+{s['refund']:,}, {s['reason']}) |")
+            elif s["kind"] == "upgrade":
+                w(f"| {s['at_net_worth']:,} | {s['from']} → **{s['item']}** ({s['cost']:,}) |")
+            else:
+                w(f"| {s['at_net_worth']:,} | buy **{s['item']}** ({s['cost']:,}) |")
+        w("")
+        gains = sorted(((h, r["teamfight"]["gain_vs_never_sell"], r["teamfight"]["sells"],
+                         r["teamfight"]["sell_loss"]) for h, r in routes.items()), key=lambda x: -x[1])
+        w("Selling pays off most for: " + ", ".join(f"{h} ({g * 100:+.0f}%, {n} sells)" for h, g, n, _ in gains[:5])
+          + ". It matters least for: " + ", ".join(f"{h} ({g * 100:+.0f}%)" for h, g, _, _ in gains[-3:]) + ".\n")
+
+    niches = load("niches.json")
+    if niches:
+        w("## Deeper niches\n")
+        A = niches["archetypes"].get(hero, {}).get("full", {})
+        if A:
+            w(f"### {hero} counter builds (50k)\n")
+            w("| situation | change vs teamfight build | in | out |\n|---|---:|---|---|")
+            for a in A.values():
+                w(f"| {a['label']} | {a['gain_vs_teamfight_build'] * 100:+.1f}% | {', '.join(a['added']) or '—'} | "
+                  f"{', '.join(a['removed']) or '—'} |")
+            w("")
+        sig = niches["signature"].get(hero, [])
+        if sig:
+            w(f"Signature items for {hero}: " + ", ".join(
+                f"{r['item']} ({r['synergy']:.1f}× its value on the median hero)" for r in sig[:3]) + ".\n")
+        valued = [r for r in niches["roster"] if r["median_value"] >= 1.0]
+        likes = sorted([r for r in valued if r["model_share"] > r["player_share"]],
+                       key=lambda r: -(r["model_share"] - r["player_share"]))[:6]
+        skips = sorted([r for r in niches["roster"] if r["player_share"] > r["model_share"]],
+                       key=lambda r: -(r["player_share"] - r["model_share"]))[:6]
+        mi = niches["meta_info"]
+        w(f"### The model vs Ascendant+ players ({mi['matches']:,} ranked matches this patch)\n")
+        w("| model buys, players don't | in model routes | player-games | | players buy, model doesn't | in model routes | player-games |")
+        w("|---|---:|---:|---|---|---:|---:|")
+        for a, b in zip(likes, skips):
+            w(f"| {a['item']} | {a['model_share'] * 100:.0f}% | {a['player_share'] * 100:.1f}% | | "
+              f"{b['item']} | {b['model_share'] * 100:.0f}% | {b['player_share'] * 100:.1f}% |")
+        w("")
+        w("Disagreement means either an underrated item or value the combat model cannot see "
+          "(mobility, economy, utility). Item win rates are not used to rank: items bought late appear "
+          "mostly in long, already-winning games.\n")
+
     for case in bench.get("cases", []):
         g, s, same = case["given"], case["solved"], case["solved_same_spend"]
         w(f"## Benchmark: {case['label']}\n")

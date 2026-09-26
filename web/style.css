@@ -179,3 +179,102 @@ table.order .from .iicon{opacity:.75}
 .tt-row b{font-variant-numeric:tabular-nums}
 .tt-i,.tt-c{font-size:10px;color:var(--faint)}
 @media(max-width:600px){.herocard{flex-direction:column}.herocard .portrait{width:100%;max-width:220px}}
+
+/* ---- dark theme ---- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --ink:#e6e8ec; --dim:#a3aab7; --faint:#7c8391;
+    --accent:#fb8a3c; --accent2:#fda15f; --accent-soft:#2b1b10;
+    --weapon:#f59e0b; --vit:#4ade80; --spirit:#a78bfa;
+    --good:#4ade80; --bad:#f87171; --warn:#fbbf24;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.25);
+    --shadow-lg:0 4px 8px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+  --ink:#e6e8ec; --dim:#a3aab7; --faint:#7c8391;
+  --accent:#fb8a3c; --accent2:#fda15f; --accent-soft:#2b1b10;
+  --weapon:#f59e0b; --vit:#4ade80; --spirit:#a78bfa;
+  --good:#4ade80; --bad:#f87171; --warn:#fbbf24;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.25);
+  --shadow-lg:0 4px 8px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.45);
+}
+.pill,.tag.act{border-color:color-mix(in srgb, var(--accent) 35%, transparent)}
+#methodBody p,#methodBody li{color:var(--ink)}
+.hdr{display:flex;justify-content:space-between;align-items:center;gap:16px}
+
+/* ---- full-game route ---- */
+.routesum{display:flex;flex-wrap:wrap;gap:8px 22px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);padding:12px 16px;box-shadow:var(--shadow);font-size:13.5px;margin-top:10px}
+.cpstrip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:12px}
+.cp{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;box-shadow:var(--shadow)}
+.cp-h{display:flex;justify-content:space-between;font-size:13px}
+.cp-h span{color:var(--accent);font-weight:650;font-variant-numeric:tabular-nums}
+.cp-s{font-size:12px;color:var(--dim);margin:2px 0 6px}
+.cp-i{display:flex;flex-wrap:wrap;gap:3px}
+.cp-i .iicon{margin:0;width:24px;height:24px}
+.cp-l{font-size:11px;color:var(--bad);margin-top:6px}
+table.route td.buy{text-align:left;white-space:normal}
+table.route tr.k-sell td{background:color-mix(in srgb, var(--bad) 7%, transparent)}
+table.route tr.k-ability td{color:var(--dim)}
+table.route tr.cprow td{background:var(--panel2);text-align:left;font-size:12px;color:var(--dim);padding:6px 13px}
+.sell b{color:var(--bad)}
+.aicon{width:22px;height:22px;border-radius:50%;vertical-align:-6px;margin-right:7px;background:var(--panel2);
+  border:1px solid var(--line);object-fit:cover}
+.dim{color:var(--faint)}
+details.more{margin-top:12px}
+details.more summary{cursor:pointer;color:var(--dim);font-size:13px;font-weight:600}
+table.order:not(.route) th:nth-child(2),table.route th:nth-child(3){text-align:left}
+
+/* ---- niches ---- */
+.arch{padding:12px 14px}
+.arch-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.swap{font-size:12px;margin-top:8px}
+
+/* ---- visual build order ---- */
+.bpath{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.bp-phase{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow)}
+.bp-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px;font-size:14px}
+.bp-idx{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);
+  color:#fff;font-size:12px;font-weight:700;align-self:center}
+.bp-score{margin-left:auto;color:var(--accent);font-weight:650;font-size:13px;font-variant-numeric:tabular-nums}
+.bp-steps{display:flex;flex-wrap:wrap;gap:8px}
+.bp-card{position:relative;width:112px;background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--line);
+  border-radius:9px;padding:9px 6px 7px;text-align:center}
+.bp-card.weapon{border-top-color:var(--weapon)} .bp-card.vitality{border-top-color:var(--vit)}
+.bp-card.spirit{border-top-color:var(--spirit)}
+.bp-card .iicon{margin:0 auto;display:block;width:40px;height:40px;border-radius:8px}
+.bp-n{position:absolute;top:4px;left:6px;font-size:11px;font-weight:700;color:var(--accent)}
+.bp-from{position:absolute;top:3px;right:5px;font-size:11px;color:var(--dim);display:flex;align-items:center;gap:1px}
+.bp-from .iicon{width:16px;height:16px;margin:0;display:inline-block;border-radius:4px}
+.bp-name{font-size:12px;font-weight:650;line-height:1.25;margin-top:5px}
+.bp-cost{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;margin-top:2px}
+.bp-card.sell{background:color-mix(in srgb, var(--bad) 8%, var(--panel2));border-color:color-mix(in srgb, var(--bad) 45%, transparent)}
+.bp-card.sell .iicon{filter:grayscale(1);opacity:.6}
+.bp-card.sell .bp-name{text-decoration:line-through;color:var(--dim)}
+.bp-card.sell .bp-cost{color:var(--bad);font-weight:650}
+.bp-abil{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:12px}
+.bp-ab{display:inline-flex;align-items:center;gap:2px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:12px;padding:1px 7px 1px 2px;font-weight:650;font-size:11px}
+.bp-ab .aicon{width:20px;height:20px;margin:0}
+.cnum{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:9px;background:var(--accent);
+  color:#fff;font-size:10.5px;font-weight:700;margin-right:2px;padding:0 4px}
+@media(max-width:600px){.bp-card{width:calc(33% - 6px)}}
+
+nav .wrap{scrollbar-width:thin}
+
+/* ---- compact build lane ---- */
+.lane{display:flex;flex-direction:column;gap:4px;max-width:620px;margin-top:10px}
+.lane-row{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
+  border-left:3px solid var(--line);border-radius:8px;padding:5px 12px 5px 7px;box-shadow:var(--shadow)}
+.lane-row.weapon{border-left-color:var(--weapon)} .lane-row.vitality{border-left-color:var(--vit)}
+.lane-row.spirit{border-left-color:var(--spirit)}
+.lane-row>.iicon{width:30px;height:30px;margin:0;border-radius:6px}
+.lane-name{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25;font-size:13.5px}
+.lane-from{font-size:11.5px;color:var(--dim)}
+.lane-from .iicon{width:16px;height:16px;margin:0 3px 0 2px;vertical-align:-4px;border-radius:3px}
+.lane-tags .tag{margin-left:4px}
+.lane-cost{min-width:52px;text-align:right;font-variant-numeric:tabular-nums;font-weight:650;color:var(--accent)}
+.aicon{background:#1c2128;border-color:#1c2128}

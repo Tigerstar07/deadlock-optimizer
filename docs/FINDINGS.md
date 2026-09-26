@@ -76,6 +76,78 @@ Re-scoring every solved build under alternative values of the three judgment cal
 
 Winner per variant: baseline → Drifter, FIGHT_WINDOW=15 → Warden, FIGHT_WINDOW=30 → Drifter, NET_INCOMING_FLOOR=0.15 → Drifter, NET_INCOMING_FLOOR=0.4 → Drifter, CLEAVE_VALUE=0.25 → Drifter, CLEAVE_VALUE=0.75 → Drifter.
 
+### Full-game route — buy, sell and ability order
+
+Strongest at every stage, not just at the end: early items are sold when a better item needs the slot or the souls (50% refund). **4 sells, 2,800 souls lost, final build complete at 52,400 net worth, every ability at tier 3.** Across the game this route scores **+18.8%** against the best route that never sells.
+
+| net worth | step |
+|---:|---|
+| 200 | ability: Stalker's Mark → tier 1 |
+| 800 | buy **Extra Health** (800) |
+| 1,600 | buy **Extended Magazine** (800) |
+| 2,000 | ability: Stalker's Mark → tier 2 |
+| 2,600 | ability: Rend → tier 1 |
+| 4,000 | Extended Magazine → **Escalating Resilience** (2,400) |
+| 4,600 | ability: Rend → tier 2 |
+| 5,300 | ability: Bloodscent → tier 1 |
+| 5,600 | buy **Active Reload** (1,600) |
+| 6,000 | ability: Eternal Night → tier 1 |
+| 6,400 | buy **Grit** (800) |
+| 7,200 | Grit → **Weapon Shielding** (800) |
+| 7,600 | ability: Bloodscent → tier 2 |
+| 8,800 | buy **Bullet Lifesteal** (1,600) |
+| 10,400 | Bullet Lifesteal → **Fury Trance** (1,600) |
+| 11,200 | buy **Extended Magazine** (800) |
+| 11,900 | ability: Bloodscent → tier 3 |
+| 12,000 | Extended Magazine → **Titanic Magazine** (800) |
+| 13,600 | buy **Weakening Headshot** (1,600) |
+| 13,800 | ability: Eternal Night → tier 2 |
+| 15,200 | buy **Bullet Resist Shredder** (1,600) |
+| 16,800 | buy **Battle Vest** (1,600) |
+| 18,400 | buy **Long Range** (1,600) |
+| 20,000 | Long Range → **Sharpshooter** (1,600) |
+| 20,600 | ability: Eternal Night → tier 3 |
+| 25,600 | sell **Weapon Shielding** (+800, needs the souls) |
+| 25,600 | buy **Ricochet** (6,400) |
+| 32,000 | buy **Inhibitor** (6,400) |
+| 32,100 | ability: Stalker's Mark → tier 3 |
+| 33,200 | sell **Extra Health** (+400, needs the slot) |
+| 33,200 | buy **Bullet Lifesteal** (1,600) |
+| 38,800 | sell **Battle Vest** (+800, needs the souls) |
+| 38,800 | buy **Frenzy** (6,400) |
+| 45,200 | buy **Lucky Shot** (6,400) |
+| 48,600 | ability: Rend → tier 3 |
+| 50,000 | Bullet Lifesteal → **Vampiric Burst** (4,800) |
+| 52,400 | sell **Titanic Magazine** (+800, needs the slot) |
+| 52,400 | buy **Spirit Resilience** (3,200) |
+
+Selling pays off most for: Vyper (+22%, 5 sells), Lady Geist (+21%, 4 sells), The Doorman (+20%, 6 sells), Drifter (+19%, 4 sells), Mirage (+18%, 3 sells). It matters least for: Lash (+4%), Victor (+4%), Graves (+3%).
+
+## Deeper niches
+
+### Drifter counter builds (50k)
+
+| situation | change vs teamfight build | in | out |
+|---|---:|---|---|
+| vs gun-heavy team | +42.0% | Bullet Resilience, Juggernaut | Spirit Resilience, Vampiric Burst |
+| vs spirit-heavy team | +3.9% | Siphon Bullets | Vampiric Burst |
+| pick / assassin | +60.6% | Bullet Resilience, Colossus, Crippling Headshot, Hunter's Aura, Suppressor | Fury Trance, Ricochet, Spirit Resilience, Vampiric Burst, Weakening Headshot |
+
+Signature items for Drifter: Sharpshooter (1.6× its value on the median hero), Fury Trance (1.4× its value on the median hero), Ricochet (1.4× its value on the median hero).
+
+### The model vs Ascendant+ players (6,098 ranked matches this patch)
+
+| model buys, players don't | in model routes | player-games | | players buy, model doesn't | in model routes | player-games |
+|---|---:|---:|---|---|---:|---:|
+| Escalating Resilience | 95% | 2.8% | | Extra Spirit | 8% | 43.1% |
+| Siphon Bullets | 97% | 6.5% | | Mystic Burst | 0% | 34.6% |
+| Spirit Resilience | 100% | 20.8% | | Sprint Boots | 0% | 31.5% |
+| Active Reload | 79% | 5.9% | | Extra Regen | 0% | 30.3% |
+| Fury Trance | 74% | 1.2% | | Tankbuster | 0% | 30.3% |
+| Weakening Headshot | 79% | 7.8% | | Extra Charge | 0% | 29.6% |
+
+Disagreement means either an underrated item or value the combat model cannot see (mobility, economy, utility). Item win rates are not used to rank: items bought late appear mostly in long, already-winning games.
+
 ## Benchmark: Enemy Drifter from your match — 21 / 2 / 17, 93k player damage, 36k healing
 
 Scoreboard at 57k net worth. The 11 item icons were matched against the official shop art (correlation 0.70–0.95 each). It spends only 33.6k of 57k on items. It is a pick / stealth tempo build (Veil Walker invisibility, Stalker reveal, Kinetic Dash, Trophy Collector snowball): it wins by choosing fights, which this sustained-combat model does not price. In a drawn-out teamfight the model rates it far below a lifesteal + shred build.

@@ -249,20 +249,232 @@ function renderAnswer() {
       'Effective HP': commas(full.ehp), 'Time to kill / to die': num(full.ttk, 1) + 's / ' + num(full.ttd, 1) + 's' }) +
     `</div></div>` + secondCard() + `</div>` +
 
-    `<h3>The build — ${esc(hero)}, full (${commas(full.spend)} souls, ${full.items.length}/${slotsAt(full.budget)} slots)</h3>` +
-    chips(full.items) +
-    `<p class="note" style="margin-top:12px">Ordered by affordability and routed through <b>components</b>: cheap parts first, ` +
-    `upgraded for the difference. Ability tiers: <b>${(full.ability_levels || []).join(' / ')}</b> (${full.ability_points} points).</p>` +
-    orderTable(orderFor(hero, 'full', 'teamfight')) +
+    `<h3>The final build — ${esc(hero)} (${commas(full.spend)} souls, ${full.items.length}/${slotsAt(full.budget)} slots, in purchase order)</h3>` +
+    orderedChips(full.items, acquisitionOrder(hero, 'teamfight')) +
+    `<h3>Build order — buy top to bottom</h3>` + buildPathHTML(hero, 'teamfight') +
     `<h3>${esc(hero)} at every stage (teamfight objective)</h3>` +
     '<div class="tablewrap"><table><thead><tr><th>stage</th><th>items</th><th>DPS</th><th>heal/s</th><th>EHP</th><th>score</th>' +
     '<th>rank</th><th>stage #1</th></tr></thead><tbody>' + stageRows + '</tbody></table></div>' +
     `<button class="btn" style="margin-top:12px" data-open="${esc(hero)}" data-obj="teamfight">Every stage's build and purchase order →</button>` +
     bench +
+    `<h3>Deeper niches for ${esc(hero)}</h3>` + nicheHeroHTML(hero) +
     `<h3>Top 10</h3><div class="grid2"><div><b>Teamfight</b>${topTable(TF.overall, 10, 'score')}</div>` +
     `<div><b>All-round</b>${topTable(AR.overall, 10, 'score')}</div></div>` +
     `<p class="note" style="margin-top:14px">This is a combat model: sustained damage, healing and survival under focus fire. ` +
     `It does not price crowd control, mobility, objectives or team utility. See <b>Method</b> for every assumption.</p>`;
+}
+
+
+/* ---------------- full-game routes (buy, upgrade, sell, abilities) ---------------- */
+function abilityIcon(hero, idx, size = 22) {
+  const a = ((D.heroes[hero] || {}).abilities || [])[idx] || {};
+  return a.img ? `<img class="aicon" src="${a.img}" alt="" width="${size}" height="${size}" loading="lazy">` : '';
+}
+function routeFor(hero, objective) { return ((D.routes || {})[hero] || {})[objective]; }
+function metaFor(hero, item) { return (((D.niches || {}).meta || {})[hero] || {})[item]; }
+function metaCell(hero, item) {
+  const m = metaFor(hero, item);
+  if (!m || !m[3]) return '<span class="dim">–</span>';
+  return `<span title="${commas(m[3])} Ascendant+ matches, smoothed win rate ${num(m[1] * 100, 1)}%">` +
+    `${num(m[0] * 100, 0)}% · ~${num(m[2], 0)} min</span>`;
+}
+const STAGE_NAME = { laning: 'Laning', early: 'Early', mid: 'Mid game', late: 'Late game', full: 'Full', end: 'Final build' };
+function routeHTML(hero, objective) {
+  const R = routeFor(hero, objective);
+  if (!R) return '<p class="note">Full-game route not computed yet (run <code>python scripts/route.py</code>).</p>';
+  const cps = R.checkpoints;
+  const strip = cps.map(cp => `<div class="cp">
+      <div class="cp-h"><b>${STAGE_NAME[cp.stage] || cp.stage}</b><span>${commas(cp.complete_at)}</span></div>
+      <div class="cp-s">score <b>${num(cp.score, 2)}</b> · tiers ${(cp.ability_levels || []).join('/')}</div>
+      <div class="cp-i">${cp.items.slice().sort((a, b) => (D.items[b] || {}).cost - (D.items[a] || {}).cost)
+        .map(n => `<span data-item="${esc(n)}">${itemIcon(n, 24)}</span>`).join('')}</div>
+      ${cp.sell_loss ? `<div class="cp-l">lost to selling so far: ${commas(cp.sell_loss)}</div>` : ''}</div>`).join('');
+  let lastStage = null, n = 0;
+  const rows = [];
+  const cpByStage = Object.fromEntries(cps.map(c => [c.stage, c]));
+  const flush = st => {
+    const cp = cpByStage[st];
+    if (cp) rows.push(`<tr class="cprow"><td colspan="7"><b>${STAGE_NAME[st] || st} checkpoint</b> · ${commas(cp.complete_at)} souls · ` +
+      `score ${num(cp.score, 2)} · ${cp.items.length}/${slotsAt(cp.complete_at)} slots</td></tr>`);
+  };
+  for (const s of R.steps) {
+    if (s.kind !== 'ability' && s.stage !== lastStage) {
+      if (lastStage) flush(lastStage);
+      lastStage = s.stage;
+    }
+    n++;
+    let action, souls, slots = '', score = '', meta = '';
+    if (s.kind === 'ability') {
+      action = `${abilityIcon(hero, s.index)}<b>${esc(s.ability)}</b> → tier ${s.tier} <span class="tag">${s.points} pt</span>`;
+      souls = '';
+    } else if (s.kind === 'sell') {
+      action = `<span class="sell">${itemIcon(s.item, 24)}Sell <b>${esc(s.item)}</b></span> <span class="tag">${esc(s.reason)}</span>`;
+      souls = `<span class="ok">+${commas(s.refund)}</span>`;
+      slots = `${s.slots}/${s.slots_open}`;
+    } else {
+      const from = s.kind === 'upgrade' ? `<span class="from">${itemIcon(s.from, 18)}${esc(s.from)} →</span> ` : '';
+      action = `${from}${itemIcon(s.item, 26)}<b data-item="${esc(s.item)}">${esc(s.item)}</b> <span class="tag">T${s.tier}</span>` +
+        ((D.items[s.item] || {}).active ? '<span class="tag act">act</span>' : '');
+      souls = commas(s.cost);
+      slots = `${s.slots}/${s.slots_open}`;
+      score = `<b>${num(s.score, 2)}</b>`;
+      meta = metaCell(hero, s.item);
+    }
+    rows.push(`<tr class="k-${s.kind}"><td class="rankno">${n}</td><td>${commas(s.at_net_worth)}</td>` +
+      `<td class="buy">${action}</td><td>${souls}</td><td>${slots}</td><td>${score}</td><td>${meta}</td></tr>`);
+  }
+  if (lastStage) flush(lastStage);
+  const gain = R.gain_vs_never_sell;
+  return `<div class="routesum">
+      <div><b>${R.sells}</b> sells · <b>${commas(R.sell_loss)}</b> souls lost to selling</div>
+      <div>final build complete at <b>${commas(R.final_complete_at)}</b> net worth</div>
+      <div>every ability at tier <b>3</b> (${(R.final_abilities || []).join(' / ')})</div>
+      ${gain != null ? `<div><b class="ok">${gain >= 0 ? '+' : ''}${num(gain * 100, 1)}%</b> stronger across the game than never selling</div>` : ''}
+    </div>
+    <div class="cpstrip">${strip}</div>
+    <div class="tablewrap"><table class="order route"><thead><tr><th class="rankno">#</th><th>net worth</th><th>step</th>
+      <th>souls</th><th>slots</th><th>score</th><th title="share of Ascendant+ players on this hero who buy it, and their average buy minute">Asc+ buy · minute</th></tr></thead>
+      <tbody>${rows.join('')}</tbody></table></div>`;
+}
+
+
+/* ---------------- visual build order ---------------- */
+const PHASE = [['laning', 'Lane', 0], ['early', 'Early game', 6000], ['mid', 'Mid game', 12000],
+  ['late', 'Late game', 20000], ['full', 'Full build', 32000], ['end', 'Finish the final build', 50000]];
+function acquisitionOrder(hero, objective) {
+  const R = routeFor(hero, objective), order = {};
+  if (!R) return order;
+  let n = 0;
+  for (const s of R.steps) {
+    if (s.kind === 'buy' || s.kind === 'upgrade') {
+      n++;
+      order[s.item] = n;      // latest acquisition wins (re-buys are rare)
+    }
+  }
+  return order;
+}
+function orderedChips(items, order) {
+  const sorted = (items || []).slice().sort((a, b) =>
+    ((order[a] || 999) - (order[b] || 999)) || ((D.items[a] || {}).cost - (D.items[b] || {}).cost));
+  return '<div class="chips">' + sorted.map((n, i) => {
+    const it = D.items[n] || {};
+    return `<span class="chip ${it.slot || ''}" data-item="${esc(n)}">${itemIcon(n)}` +
+      `<b>${esc(n)}</b><span>T${it.tier} · ${commas(it.cost || 0)}</span>${it.active ? '<span class="tag act">act</span>' : ''}</span>`;
+  }).join('') + '</div>';
+}
+function routeCheckpoint(hero, objective, stage) {
+  const R = routeFor(hero, objective);
+  if (!R) return null;
+  if (stage === 'full') return R.checkpoints.find(c => c.stage === 'end') || R.checkpoints.find(c => c.stage === 'full');
+  return R.checkpoints.find(c => c.stage === stage);
+}
+function buildPathHTML(hero, objective) {
+  const R = routeFor(hero, objective);
+  if (!R) return '<p class="note">Build order not computed yet (run <code>python scripts/route.py</code>).</p>';
+  const rows = R.steps.filter(s => s.kind === 'buy' || s.kind === 'upgrade').map(s => {
+    const it = D.items[s.item] || {};
+    const from = s.kind === 'upgrade' ? `<span class="lane-from">from ${itemIcon(s.from, 16)}${esc(s.from)}</span>` : '';
+    return `<div class="lane-row ${it.slot || ''}" data-item="${esc(s.item)}">${itemIcon(s.item, 30)}` +
+      `<span class="lane-name"><b>${esc(s.item)}</b>${from}</span>` +
+      `<span class="lane-tags"><span class="tag">T${it.tier}</span>${it.active ? '<span class="tag act">act</span>' : ''}</span>` +
+      `<span class="lane-cost">${commas(s.cost)}</span></div>`;
+  }).join('');
+  const abil = R.steps.filter(s => s.kind === 'ability').map(s =>
+    `<span class="bp-ab" title="${esc(s.ability)} → tier ${s.tier} at ${commas(s.at_net_worth)} souls">` +
+    `${abilityIcon(hero, s.index, 20)}T${s.tier}</span>`).join('');
+  return `<div class="lane">${rows}</div>` +
+    `<div class="bp-abil"><span class="dim">Ability upgrades, in order:</span>${abil}</div>`;
+}
+
+/* ---------------- niches: counter builds, signature items, model vs players ---------------- */
+function nicheHeroHTML(hero) {
+  const N = D.niches;
+  if (!N) return '<p class="note">Niche analysis not computed yet (run <code>python scripts/niches.py</code>).</p>';
+  const A = N.archetypes[hero] || {};
+  const arch = ['late', 'full'].map(st => {
+    const S = A[st] || {};
+    return `<div><h4>${STAGE_LABEL[st]}</h4>` + Object.values(S).map(a =>
+      `<div class="card arch"><div class="arch-h"><b>${esc(a.label)}</b>` +
+      `<span class="pill">${a.gain_vs_teamfight_build > 0.0005 ? '+' + num(a.gain_vs_teamfight_build * 100, 1) + '% vs teamfight build' : 'teamfight build already best'}</span></div>` +
+      chips(a.items) +
+      ((a.added || []).length ? `<div class="swap"><span class="ok">+ ${a.added.map(esc).join(', ')}</span>` +
+        ` <span class="warn">− ${(a.removed || []).map(esc).join(', ')}</span></div>` : '') + '</div>').join('') + '</div>';
+  }).join('');
+  const sig = (N.signature[hero] || []).map(r => `<tr><td class="buy">${itemIcon(r.item, 24)}<b data-item="${esc(r.item)}">${esc(r.item)}</b></td>` +
+    `<td>${num((r.value - 1) * 100, 1)}%</td><td>${num((r.median - 1) * 100, 1)}%</td><td><b>${num(r.synergy, 2)}×</b></td></tr>`).join('');
+  const gem = (N.gems[hero] || []).map(r => `<tr><td class="buy">${itemIcon(r.item, 24)}<b data-item="${esc(r.item)}">${esc(r.item)}</b>` +
+    `${r.in_build ? ' <span class="tag act">in build</span>' : ''}</td><td>+${num((r.value - 1) * 100, 1)}%</td>` +
+    `<td>${num(r.pick_rate * 100, 1)}%</td><td>${r.matches ? num(r.win_rate * 100, 1) + '%' : '–'}</td></tr>`).join('');
+  const trap = (N.traps[hero] || []).map(r => `<tr><td class="buy">${itemIcon(r.item, 24)}<b data-item="${esc(r.item)}">${esc(r.item)}</b></td>` +
+    `<td>${num((r.value - 1) * 100, 1)}%</td><td>${num(r.pick_rate * 100, 0)}%</td><td>${num(r.win_rate * 100, 1)}%</td>` +
+    `<td>~${num(r.buy_min, 0)} min</td></tr>`).join('');
+  return `<h3>Counter & archetype builds</h3>
+    <p class="note">The same solver, aimed at one situation: a gun-heavy enemy team, a spirit-heavy enemy team, or isolated picks.
+    Green items come in, red go out, compared with the teamfight build at that stage.</p>
+    <div class="grid2">${arch}</div>
+    <div class="grid2">
+      <div><h3>Signature items</h3>
+        <p class="note">What the item adds to this hero's 32k teamfight build, against what it adds for the median hero.</p>
+        <div class="tablewrap"><table><thead><tr><th>item</th><th>on ${esc(hero)}</th><th>median hero</th><th>synergy</th></tr></thead>
+        <tbody>${sig || '<tr><td colspan="4">no standout synergies</td></tr>'}</tbody></table></div></div>
+      <div><h3>Hidden gems</h3>
+        <p class="note">The model values them; under ${num(N.meta_info.gem_max_pick * 100, 0)}% of Ascendant+ players on ${esc(hero)} buy them.</p>
+        <div class="tablewrap"><table><thead><tr><th>item</th><th>model gain</th><th>players buy</th><th>win rate*</th></tr></thead>
+        <tbody>${gem || '<tr><td colspan="4">none: players already buy what the model likes</td></tr>'}</tbody></table></div>
+        <h3>Popular, but the model would swap them</h3>
+        <div class="tablewrap"><table><thead><tr><th>item</th><th>model change</th><th>players buy</th><th>win rate*</th><th>bought</th></tr></thead>
+        <tbody>${trap || '<tr><td colspan="5">none found</td></tr>'}</tbody></table></div></div>
+    </div>
+    <p class="note">* Item win rates are descriptive only: items bought late show up mostly in long, already-winning games.
+    ${commas(N.meta_info.matches)} Ascendant+ ranked matches since the ${esc(N.meta_info.patch)} patch, fetched ${esc(N.meta_info.fetched_at.slice(0, 10))}.</p>`;
+}
+function renderNiches() {
+  const N = D.niches;
+  if (!N) { $('#nichesBody').innerHTML = '<p class="note">run <code>python scripts/niches.py</code></p>'; return; }
+  const hero = $('#nicheHero').value;
+  const likes = N.roster.filter(r => r.median_value >= 1.0 && r.model_share > r.player_share)
+    .sort((a, b) => (b.model_share - b.player_share) - (a.model_share - a.player_share)).slice(0, 10);
+  const skips = N.roster.filter(r => r.player_share > r.model_share)
+    .sort((a, b) => (b.player_share - b.model_share) - (a.player_share - a.model_share)).slice(0, 10);
+  const rrow = r => `<tr><td class="buy">${itemIcon(r.item, 24)}<b data-item="${esc(r.item)}">${esc(r.item)}</b></td>` +
+    `<td>${num(r.model_share * 100, 0)}%</td><td>${num(r.player_share * 100, 1)}%</td>` +
+    `<td>${r.win_rate != null ? num(r.win_rate * 100, 1) + '%' : '–'}</td><td>${r.buy_min != null ? '~' + num(r.buy_min, 0) + ' min' : '–'}</td></tr>`;
+  const head = '<thead><tr><th>item</th><th>in model routes</th><th>Asc+ purchases</th><th>win rate*</th><th>bought</th></tr></thead>';
+  $('#nichesBody').innerHTML = `
+    <div class="grid2">
+      <div><h3>The model buys these, players mostly don't</h3>
+        <div class="tablewrap"><table>${head}<tbody>${likes.map(rrow).join('')}</tbody></table></div></div>
+      <div><h3>Players buy these, the model mostly doesn't</h3>
+        <div class="tablewrap"><table>${head}<tbody>${skips.map(rrow).join('')}</tbody></table></div></div>
+    </div>
+    <p class="note">"In model routes" is the share of the 38 heroes whose full-game teamfight route buys the item at some point
+    (early items that are sold later count, as they do for players).
+    "Asc+ purchases" is the share of Ascendant+ player-games that bought it. Disagreement is where the combat model and real play
+    differ: either an underrated item, or value the model cannot see (mobility, economy, utility).</p>
+    <h2 style="margin-top:28px">${heroIcon(hero, 'hicon lg')}${esc(hero)}</h2>
+    ${nicheHeroHTML(hero)}`;
+}
+
+/* ---------------- theme ---------------- */
+function applyTheme(t) {
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  else document.documentElement.removeAttribute('data-theme');
+  const dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const b = document.getElementById('themeBtn');
+  if (b) b.textContent = dark ? '☀ Light' : '☾ Dark';
+}
+function initTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem('theme'); } catch (e) { /* storage blocked */ }
+  applyTheme(saved);
+  const b = document.getElementById('themeBtn');
+  if (b) b.onclick = () => {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+      (!document.documentElement.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    const next = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', next); } catch (e) { /* ignore */ }
+    applyTheme(next);
+  };
 }
 
 /* ---------------- rankings ---------------- */
@@ -369,11 +581,12 @@ function renderHeroBuild(hero, stage, objective) {
       <div class="chips" style="margin-top:12px">${scen}</div>
     </div>
   </div>
-  <h3>Items</h3>${chips(r.items)}
-  <h3>Buy in this order</h3>
-  <p class="note">At each step the best remaining purchase per soul, paced so you never open with a tier-4 you cannot afford.
-  <b>invest W/V/S</b> is the cumulative weapon / vitality / spirit Investment bonus.</p>
-  ${orderTable(orderFor(hero, stage, objective))}
+  <h3>Build order — buy top to bottom (${OBJ_LABEL[objective]})</h3>
+  ${buildPathHTML(hero, objective)}
+  <h3>Your items at ${STAGE_LABEL[stage]}</h3>
+  ${(() => { const cp = routeCheckpoint(hero, objective, stage);
+    return orderedChips(cp ? cp.items : r.items, acquisitionOrder(hero, objective)); })()}
+  <h3>Niches</h3>${nicheHeroHTML(hero)}
   <h3>Ability allocation — ${r.ability_points} points · tiers ${(r.ability_levels || []).join(' / ')}</h3>
   <div class="grid2">${abilityCards(H, r.ability_levels, r.spirit_power || 0)}</div>`;
   $('#bdStage').onchange = () => renderHeroBuild(hero, $('#bdStage').value, $('#bdObj').value);
@@ -394,7 +607,7 @@ function renderBuilds() {
       <div class="kv" style="margin-bottom:6px;max-width:520px">
         <div>DPS</div><div>${num(r.total_dps, 0)}</div><div>Healing</div><div>${num(r.heal_ps, 0)} /s</div>
         <div>Effective HP</div><div>${commas(r.ehp || 0)}</div><div>Spent</div><div>${commas(r.spend || 0)} souls</div>
-      </div>${chips(r.items)}</div>`).join('') || '<p class="note">no matches</p>';
+      </div>${orderedChips(r.items, acquisitionOrder(r.hero, objective))}</div>`).join('') || '<p class="note">no matches</p>';
 }
 
 /* ---------------- hero stat browser ---------------- */
@@ -610,6 +823,16 @@ objective = weighted geometric mean over scenarios, one legal ability allocation
   <p>${esc(M.optimization || '')}. Every published build is re-checked by <code>verify/check_outputs.py --deep</code>
   to be a one-item-exchange local optimum. The reference opponent is the median hero on its own solved build, iterated to a fixed point
   (drift per pass: ${(M.reference_drift || []).map(x => num(x * 100, 1) + '%').join(' → ')}).</p>
+  <h3>Full-game routes</h3>
+  <p>A beam search over the five checkpoints re-solves each checkpoint's build given what the route already owns and the souls
+  it has lost selling (50% refund; the full refund inside the shop is ignored). Routes are ranked by the stage-weighted sum of
+  log scores, so +20% early counts as much as +20% late, and every route must still finish the final build by 56k. Ability
+  points follow a DP over tier allocations that only go up and end with every ability at tier 3. Items are bought as souls
+  arrive; an old item is sold only when its slot or its refund is needed, and only once the replacement is affordable.</p>
+  <h3>Niches</h3>
+  <p>Counter builds re-run the solver on a single scenario (gun-heavy team, spirit-heavy team, isolated pick). Signature items
+  compare an item's value to a hero's 32k teamfight build with its value to the median hero. Hidden gems and traps compare the
+  model with Ascendant+ item purchases for the current patch from the Deadlock API.</p>
   <h3>Assumptions you should know</h3>
   <ul>
     <li>Each scenario is <b>one 20-second engagement entered with every cooldown ready</b>: actives, ultimates, barriers and
@@ -629,6 +852,7 @@ objective = weighted geometric mean over scenarios, one legal ability allocation
 }
 
 /* ---------------- boot ---------------- */
+initTheme();
 async function boot() {
   D = await fetch('data.json?v=' + Date.now()).then(r => r.json());
   try { API = (await fetch('/api/health', { cache: 'no-store' })).ok; } catch (e) { API = false; }
@@ -638,9 +862,9 @@ async function boot() {
   $('#meta').textContent = `${D.meta.patch} · ${Object.keys(D.heroes).length} heroes · ${Object.keys(D.items).length} items · ` +
     `extracted ${D.meta.extracted} · ${API ? 'model server connected' : 'static mode (run scripts/serve.py for the Build Lab)'}`;
   const names = Object.keys(D.heroes).sort();
-  for (const s of ['#heroSel', '#labHero']) $(s).innerHTML = names.map(n => `<option>${esc(n)}</option>`).join('');
+  for (const s of ['#heroSel', '#labHero', '#nicheHero']) $(s).innerHTML = names.map(n => `<option>${esc(n)}</option>`).join('');
   const tfTop = Object.entries(table('teamfight').overall).sort((a, b) => b[1] - a[1])[0][0];
-  $('#heroSel').value = tfTop; $('#labHero').value = tfTop;
+  $('#heroSel').value = tfTop; $('#labHero').value = tfTop; $('#nicheHero').value = tfTop;
   const banner = $('#recalcNotice');
   if (banner && D.optimization.model) banner.textContent =
     `Recalculated ${new Date(D.generated || Date.now()).toISOString().slice(0, 10)} with 9→12 slot (Walker) shop rules and corrected item mechanics · ` +
@@ -652,6 +876,7 @@ async function boot() {
   } };
   safe('answer', renderAnswer); safe('pro', renderPro); safe('rank', renderRank); safe('build', renderBuilds);
   safe('hero', renderHero); safe('item', renderItems); safe('lab', renderLab); safe('method', renderMethod);
+  safe('niches', renderNiches);
   bindTips();
   new MutationObserver(() => bindTips()).observe(document.querySelector('main'), { childList: true, subtree: true });
 }
@@ -662,6 +887,7 @@ document.addEventListener('change', e => {
   if (e.target.matches('#rankStage,#rankObj')) renderRank();
   if (e.target.matches('#bStage,#bSort,#bObj')) renderBuilds();
   if (e.target.matches('#labHero,#labObj')) renderLab();
+  if (e.target.matches('#nicheHero')) renderNiches();
 });
 let labTimer = null;
 document.addEventListener('input', e => {

@@ -4,13 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deadlock Optimizer</title>
-<link rel="stylesheet" href="style.css?v=20260926">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v=20260926d">
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>Deadlock <span>Build Optimizer</span></h1>
-    <p class="sub" id="meta">loading…</p>
+    <div class="hdr">
+      <div><h1>Deadlock <span>Build Optimizer</span></h1>
+      <p class="sub" id="meta">loading…</p></div>
+      <button id="themeBtn" class="btn" type="button" aria-label="Toggle dark mode">☾ Dark</button>
+    </div>
   </div>
 </header>
 
@@ -21,6 +25,7 @@
   <button data-tab="rank">Rankings</button>
   <button data-tab="builds">All Builds</button>
   <button data-tab="build" id="buildTabBtn" style="display:none">Hero Build</button>
+  <button data-tab="niches">Niches</button>
   <button data-tab="lab">Build Lab</button>
   <button data-tab="heroes">Heroes</button>
   <button data-tab="items">Items</button>
@@ -105,6 +110,14 @@
   <div id="itemList" class="itemgrid"></div>
 </section>
 
+<section id="niches" class="tab">
+  <h2>Deeper niches</h2>
+  <p class="note">Counter builds against gun- or spirit-heavy teams and for isolated picks, each hero's signature items, and where
+  the model disagrees with what Ascendant+ players actually buy this patch.</p>
+  <div class="controls"><label>Hero <select id="nicheHero"></select></label></div>
+  <div id="nichesBody"></div>
+</section>
+
 <section id="lab" class="tab">
   <h2>Build Lab</h2>
   <p class="note">Pick a hero and net worth, then click items to add them. Every build is scored by the <b>same Python model</b>
@@ -139,6 +152,6 @@
 </section>
 
 </main>
-<script src="app.js?v=20260926"></script>
+<script src="app.js?v=20260926d"></script>
 </body>
 </html>

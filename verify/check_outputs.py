@@ -17,7 +17,8 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
-from model import HEROES, ITEMS, MAX_ACTIVES, slots_at  # noqa: E402
+from model import (ABILITY_TIER_COST, HEROES, ITEMS, MAX_ACTIVES,  # noqa: E402
+                   ability_points_for_networth, slots_at)
 from optimize import STAGES, STAGE_WEIGHT, Search, make_row, search_pool  # noqa: E402
 
 CHECKED_FIELDS = ("score", "spend", "gun_dps", "ability_dps", "total_dps",
@@ -96,6 +97,67 @@ def check_orders(orders, rows_by_key, suffix):
             raise AssertionError(f"{key}: order does not end in the solved build")
 
 
+def check_routes(routes, tables):
+    """Replay every full-game route: souls, slots, sells, components, abilities."""
+    for hero, by_obj in routes.items():
+        for objective, route in by_obj.items():
+            key = f"route {objective}:{hero}"
+            owned, spent, refunds, last_nw = [], 0.0, 0.0, 0
+            tiers = [0] * len(HEROES[hero]["abilities"])
+            stage_owned = {}
+            for step in route["steps"]:
+                nw = step["at_net_worth"]
+                if nw < last_nw:
+                    raise AssertionError(f"{key}: timeline goes back in time at {step}")
+                last_nw = nw
+                kind = step["kind"]
+                if kind == "ability":
+                    i, t = step["index"], step["tier"]
+                    if t != tiers[i] + 1:
+                        raise AssertionError(f"{key}: ability tier jump {step}")
+                    tiers[i] = t
+                    used = sum(ABILITY_TIER_COST[x] for x in tiers)
+                    if used > ability_points_for_networth(HEROES[hero], nw):
+                        raise AssertionError(f"{key}: spends {used} points at {nw}")
+                    continue
+                item = step["item"]
+                if kind == "sell":
+                    if item not in owned:
+                        raise AssertionError(f"{key}: sells unowned {item}")
+                    if not math.isclose(step["refund"], round(0.5 * ITEMS[item]["cost"])):
+                        raise AssertionError(f"{key}: wrong refund for {item}")
+                    owned.remove(item)
+                    refunds += step["refund"]
+                else:
+                    if kind == "upgrade":
+                        if step["from"] not in owned:
+                            raise AssertionError(f"{key}: upgrades missing component {step['from']}")
+                        if step["cost"] != ITEMS[item]["cost"] - ITEMS[step["from"]]["cost"]:
+                            raise AssertionError(f"{key}: wrong upgrade cost for {item}")
+                        owned.remove(step["from"])
+                    elif step["cost"] != ITEMS[item]["cost"]:
+                        raise AssertionError(f"{key}: wrong price for {item}")
+                    if item in owned:
+                        raise AssertionError(f"{key}: buys duplicate {item}")
+                    owned.append(item)
+                    spent += step["cost"]
+                if spent - refunds > nw + 1:
+                    raise AssertionError(f"{key}: spends {spent - refunds:.0f} of {nw} souls")
+                if len(owned) > slots_at(nw):
+                    raise AssertionError(f"{key}: {len(owned)} items with {slots_at(nw)} slots at {nw}")
+                if sum(ITEMS[x]["is_active"] for x in owned) > MAX_ACTIVES:
+                    raise AssertionError(f"{key}: more than {MAX_ACTIVES} actives")
+                stage_owned[step["stage"]] = sorted(owned)
+            for cp in route["checkpoints"]:
+                if stage_owned.get(cp["stage"]) != sorted(cp["items"]):
+                    raise AssertionError(f"{key}: checkpoint {cp['stage']} does not match the replay")
+            full = next(r for r in tables[objective]["full"] if r["hero"] == hero)["items"]
+            if sorted(owned) != sorted(full) or sorted(route["final_items"]) != sorted(full):
+                raise AssertionError(f"{key}: route does not end in the solved full build")
+            if tiers != [3] * len(tiers) or route["final_abilities"] != tiers:
+                raise AssertionError(f"{key}: abilities not all maxed at the end ({tiers})")
+
+
 def _deep_one(task):
     hero, stage, budget, ref, items, score, objective = task
     search = Search(hero, budget, ref, objective, search_pool(hero), random.Random(0))
@@ -128,6 +190,14 @@ def main():
             check_orders(orders, rows, suffix)
             print(f"PASS: {objective}: replayed {len(rows)} purchase orders")
         all_rows += [(objective, row) for row in rows.values()]
+
+    routes_path = os.path.join(ROOT, "data", "routes.json")
+    if os.path.exists(routes_path):
+        routes = json.load(open(routes_path, encoding="utf-8"))
+        stage_tables = {obj: st for obj, st, _, _ in tables}
+        check_routes(routes, stage_tables)
+        n = sum(len(v) for v in routes.values())
+        print(f"PASS: replayed {n} full-game routes (souls, slots, sells, components, all abilities maxed)")
 
     if args.deep:
         tasks = [(r["hero"], r["stage"], r["budget"], refs[r["stage"]], r["items"], r["score"], obj)

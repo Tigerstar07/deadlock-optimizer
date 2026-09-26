@@ -30,6 +30,16 @@ def main():
             "bg": im.get("background_image_webp") or im.get("background_image"),
         }
 
+    # ability icons: the hero's signature1-4 ability records carry the art
+    raw_items = json.load(open(os.path.join(DATA, "items_raw.json"), encoding="utf-8"))
+    by_class = {x.get("class_name"): x for x in raw_items}
+    ABIL_IMG = {}
+    for x in raw_heroes:
+        for slot, cls in (x.get("items") or {}).items():
+            a = by_class.get(cls)
+            if slot.startswith("signature") and a:
+                ABIL_IMG[(x.get("name"), a.get("name"))] = a.get("image_webp") or a.get("image")
+
     heroes = {}
     for n, h in HEROES.items():
         w = h["weapon"]
@@ -53,6 +63,7 @@ def main():
                                 "css": p.get("css"), "label": p.get("label")}
             abilities.append({
                 "name": a.get("name"),
+                "img": ABIL_IMG.get((n, a.get("name"))),
                 "ult": a.get("is_ultimate"),
                 "desc": a.get("desc"),
                 "props": props,
@@ -132,6 +143,8 @@ def main():
     for fname, key in [("optimization.json", "optimization"),
                        ("benchmarks.json", "benchmarks"),
                        ("sensitivity.json", "sensitivity"),
+                       ("routes.json", "routes"),
+                       ("niches.json", "niches"),
                        ("orders.json", "orders"),
                        ("pro_ranking.json", "pro_ranking"),
                        ("hero_meta.json", "meta_all"),

@@ -311,5 +311,26 @@ class ShopAndItemTests(unittest.TestCase):
         self.assertEqual(len(ranges), 1)
 
 
+class RouteTests(unittest.TestCase):
+    """Full-game route mechanics (deadlock.wiki/Shop)."""
+
+    def setUp(self):
+        import route
+        self.route = route
+
+    def test_selling_refunds_half(self):
+        self.assertEqual(self.route.sell_loss(["Extra Health"]), ITEMS["Extra Health"]["cost"] / 2)
+
+    def test_upgrade_credits_component_instead_of_selling_it(self):
+        sold, consumed = self.route.transition(["Extended Magazine", "Extra Health"], ["Titanic Magazine"])
+        self.assertEqual(sold, ["Extra Health"])
+        self.assertEqual(consumed, {"Titanic Magazine": "Extended Magazine"})
+
+    def test_every_hero_can_max_all_abilities(self):
+        for hero in HEROES:
+            with self.subTest(hero=hero):
+                self.assertEqual(len(self.route.point_unlocks(hero)), 32)
+
+
 if __name__ == "__main__":
     unittest.main()

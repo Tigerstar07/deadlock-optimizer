@@ -5,7 +5,7 @@ Run the whole pipeline in order:
     python scripts/pipeline.py --extract    # also rebuild dataset.json
     python scripts/pipeline.py --skip-solve # reuse data/optimization.json
 
-extract -> optimize -> orders -> benchmarks -> sensitivity -> pro rank -> findings -> docs -> web -> verify
+extract -> optimize -> orders -> routes -> benchmarks -> sensitivity -> item meta -> niches -> pro rank -> findings -> docs -> web -> verify
 """
 
 import argparse
@@ -35,8 +35,11 @@ def main():
     if not args.skip_solve:
         run("scripts/optimize.py", "--iterations", args.iterations)
     run("scripts/order_all.py")
+    run("scripts/route.py")
     run("scripts/benchmarks.py")
     run("scripts/sensitivity.py")
+    run("scripts/item_meta.py")      # snapshot; --refresh to refetch
+    run("scripts/niches.py")
     run("scripts/pro_rank.py")
     run("scripts/findings.py")
     run("scripts/docs_gen.py")
