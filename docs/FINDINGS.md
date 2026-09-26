@@ -121,7 +121,7 @@ Strongest at every stage, not just at the end: early items are sold when a bette
 | 52,400 | sell **Titanic Magazine** (+800, needs the slot) |
 | 52,400 | buy **Spirit Resilience** (3,200) |
 
-Selling pays off most for: Vyper (+22%, 5 sells), Lady Geist (+21%, 4 sells), The Doorman (+20%, 6 sells), Drifter (+19%, 4 sells), Mirage (+18%, 3 sells). It matters least for: Lash (+4%), Victor (+4%), Graves (+3%).
+Selling pays off most for: Vyper (+22%, 5 sells), Lady Geist (+21%, 4 sells), Drifter (+19%, 4 sells), The Doorman (+19%, 7 sells), Mirage (+18%, 3 sells). It matters least for: Lash (+4%), Graves (+3%), Victor (+2%).
 
 ## Deeper niches
 
@@ -139,11 +139,11 @@ Signature items for Drifter: Sharpshooter (1.6× its value on the median hero), 
 
 | model buys, players don't | in model routes | player-games | | players buy, model doesn't | in model routes | player-games |
 |---|---:|---:|---|---|---:|---:|
-| Escalating Resilience | 95% | 2.8% | | Extra Spirit | 8% | 43.1% |
-| Siphon Bullets | 97% | 6.5% | | Mystic Burst | 0% | 34.6% |
+| Siphon Bullets | 97% | 6.5% | | Extra Spirit | 8% | 43.1% |
+| Escalating Resilience | 92% | 2.8% | | Mystic Burst | 0% | 34.6% |
 | Spirit Resilience | 100% | 20.8% | | Sprint Boots | 0% | 31.5% |
-| Active Reload | 79% | 5.9% | | Extra Regen | 0% | 30.3% |
-| Fury Trance | 74% | 1.2% | | Tankbuster | 0% | 30.3% |
+| Bullet Resist Shredder | 89% | 16.0% | | Extra Regen | 0% | 30.3% |
+| Active Reload | 79% | 5.9% | | Tankbuster | 0% | 30.3% |
 | Weakening Headshot | 79% | 7.8% | | Extra Charge | 0% | 29.6% |
 
 Disagreement means either an underrated item or value the combat model cannot see (mobility, economy, utility). Item win rates are not used to rank: items bought late appear mostly in long, already-winning games.

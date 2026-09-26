@@ -165,7 +165,7 @@ function orderTable(order) {
 }
 function topTable(overall, n, label) {
   const rows = Object.entries(overall).sort((a, b) => b[1] - a[1]).slice(0, n);
-  return `<div class="tablewrap"><table><thead><tr><th class="rankno">#</th><th>hero</th><th>${label}</th></tr></thead><tbody>` +
+  return `<div class="tablewrap"><table><thead><tr><th class="rankno">#</th><th class="left">hero</th><th>${label}</th></tr></thead><tbody>` +
     rows.map((e, i) => `<tr class="clickable${i === 0 ? ' top' : ''}" data-open="${esc(e[0])}"><td class="rankno">${i + 1}</td>` +
       `<td class="hero">${heroIcon(e[0])}${esc(e[0])}</td><td><b>${num(e[1], 3)}</b></td></tr>`).join('') + '</tbody></table></div>';
 }
@@ -371,13 +371,39 @@ function routeCheckpoint(hero, objective, stage) {
 function buildPathHTML(hero, objective) {
   const R = routeFor(hero, objective);
   if (!R) return '<p class="note">Build order not computed yet (run <code>python scripts/route.py</code>).</p>';
-  const rows = R.steps.filter(s => s.kind === 'buy' || s.kind === 'upgrade').map(s => {
-    const it = D.items[s.item] || {};
-    const from = s.kind === 'upgrade' ? `<span class="lane-from">from ${itemIcon(s.from, 16)}${esc(s.from)}</span>` : '';
-    return `<div class="lane-row ${it.slot || ''}" data-item="${esc(s.item)}">${itemIcon(s.item, 30)}` +
-      `<span class="lane-name"><b>${esc(s.item)}</b>${from}</span>` +
+  // One row per item you end up building, at the moment you start it. A
+  // component bought to be upgraded later is folded into its upgrade
+  // ("start with X") instead of appearing as its own row, so a component
+  // used for two different items is not listed twice.
+  // A sale always happens right before the purchase that needed its slot or
+  // souls, so each sold item is shown on the row of the item it makes room for.
+  const list = [], open = {};
+  let selling = [];
+  for (const s of R.steps) {
+    if (s.kind === 'sell') { selling.push(s.item); continue; }
+    if (s.kind === 'buy') {
+      list.push({ item: s.item, via: null, sells: selling });
+      open[s.item] = list.length - 1;
+      selling = [];
+    } else if (s.kind === 'upgrade') {
+      const i = open[s.from];
+      if (i !== undefined) {
+        list[i] = { item: s.item, via: s.from, sells: list[i].sells.concat(selling) };
+        delete open[s.from];
+      } else list.push({ item: s.item, via: s.from, sells: selling });
+      selling = [];
+    }
+  }
+  const seen = new Set();
+  const rows = list.filter(r => !seen.has(r.item) && seen.add(r.item)).map(r => {
+    const it = D.items[r.item] || {};
+    const via = r.via ? `<span class="lane-from">start with ${itemIcon(r.via, 16)}${esc(r.via)}</span>` : '';
+    const sell = r.sells.length ? `<span class="lane-sell">sell ${r.sells.map(x =>
+      `${itemIcon(x, 16)}${esc(x)}`).join(', ')} to make room</span>` : '';
+    return `<div class="lane-row ${it.slot || ''}${r.sells.length ? ' swap' : ''}" data-item="${esc(r.item)}">${itemIcon(r.item, 30)}` +
+      `<span class="lane-name"><b>${esc(r.item)}</b>${via}${sell}</span>` +
       `<span class="lane-tags"><span class="tag">T${it.tier}</span>${it.active ? '<span class="tag act">act</span>' : ''}</span>` +
-      `<span class="lane-cost">${commas(s.cost)}</span></div>`;
+      `<span class="lane-cost">${commas(it.cost)}</span></div>`;
   }).join('');
   const abil = R.steps.filter(s => s.kind === 'ability').map(s =>
     `<span class="bp-ab" title="${esc(s.ability)} → tier ${s.tier} at ${commas(s.at_net_worth)} souls">` +
@@ -507,7 +533,7 @@ function renderRank() {
   const cols = [['hero', 'Hero'], ['score', 'Score'], ['dps', 'DPS'], ['heal', 'Heal/s'], ['sustain', 'Heal ÷ incoming'],
     ['ehp', 'EHP'], ['wr', 'Win % (all)'], ['hi', 'Win % (Asc+)']];
   const max = Math.max(...rows.map(r => r.score || 0));
-  let h = '<thead><tr><th class="rankno">#</th>' + cols.map(c => `<th data-c="${c[0]}">${c[1]}</th>`).join('') + '</tr></thead><tbody>';
+  let h = '<thead><tr><th class="rankno">#</th>' + cols.map(c => `<th data-c="${c[0]}"${c[0] === 'hero' ? ' class="left"' : ''}>${c[1]}</th>`).join('') + '</tr></thead><tbody>';
   rows.forEach((r, i) => {
     h += `<tr class="clickable${i === 0 && rankSort.col === 'score' ? ' top' : ''}" data-hero="${esc(r.hero)}"><td class="rankno">${i + 1}</td><td class="hero">${heroIcon(r.hero)}${esc(r.hero)}</td>` +
       `<td>${num(r.score, 3)} <span class="bar" style="width:${Math.max(1, (r.score / max) * 46)}px"></span></td>` +

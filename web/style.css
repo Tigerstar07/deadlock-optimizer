@@ -278,3 +278,7 @@ nav .wrap{scrollbar-width:thin}
 .lane-tags .tag{margin-left:4px}
 .lane-cost{min-width:52px;text-align:right;font-variant-numeric:tabular-nums;font-weight:650;color:var(--accent)}
 .aicon{background:#1c2128;border-color:#1c2128}
+
+td.hero,th.left{text-align:left}
+.lane-sell{font-size:11.5px;color:var(--bad);font-weight:600}
+.lane-sell .iicon{width:16px;height:16px;margin:0 3px 0 2px;vertical-align:-4px;border-radius:3px;filter:grayscale(.6)}

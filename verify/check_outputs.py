@@ -102,7 +102,7 @@ def check_routes(routes, tables):
     for hero, by_obj in routes.items():
         for objective, route in by_obj.items():
             key = f"route {objective}:{hero}"
-            owned, spent, refunds, last_nw = [], 0.0, 0.0, 0
+            owned, spent, refunds, last_nw, ever_sold = [], 0.0, 0.0, 0, set()
             tiers = [0] * len(HEROES[hero]["abilities"])
             stage_owned = {}
             for step in route["steps"]:
@@ -124,6 +124,9 @@ def check_routes(routes, tables):
                 if kind == "sell":
                     if item not in owned:
                         raise AssertionError(f"{key}: sells unowned {item}")
+                    if item in route["final_items"]:
+                        raise AssertionError(f"{key}: sells {item}, which is in the final build")
+                    ever_sold.add(item)
                     if not math.isclose(step["refund"], round(0.5 * ITEMS[item]["cost"])):
                         raise AssertionError(f"{key}: wrong refund for {item}")
                     owned.remove(item)
@@ -139,6 +142,8 @@ def check_routes(routes, tables):
                         raise AssertionError(f"{key}: wrong price for {item}")
                     if item in owned:
                         raise AssertionError(f"{key}: buys duplicate {item}")
+                    if item in ever_sold:
+                        raise AssertionError(f"{key}: re-buys {item} after selling it")
                     owned.append(item)
                     spent += step["cost"]
                 if spent - refunds > nw + 1:

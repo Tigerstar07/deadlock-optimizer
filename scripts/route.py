@@ -105,13 +105,18 @@ class RouteSearch(Search):
     A build is affordable only if its cost plus the souls lost selling so far
     plus the loss from selling what it drops fits inside the checkpoint's net
     worth. With ``allow_sell=False`` a build must keep every owned item
-    (components may still be upgraded).
+    (components may still be upgraded). Two player-sense rules always hold:
+    an item of the final build is never sold once owned, and an item that was
+    sold is never bought again.
     """
 
-    def __init__(self, hero, nw, ref, objective, pool, rng, prev, loss, allow_sell=True, final=None):
+    def __init__(self, hero, nw, ref, objective, pool, rng, prev, loss, allow_sell=True,
+                 final=None, banned=()):
         super().__init__(hero, nw - loss, ref, objective, pool, rng, net_worth=nw)
         self.prev, self.loss, self.cap, self.allow_sell = list(prev), loss, nw, allow_sell
         self.final = list(final or [])
+        # final-build items and everything they are built from
+        self.final_set, self.banned = with_components(self.final), set(banned)
         self.end_budget = END_NET_WORTH - cost(self.final) if final else None
 
     def score(self, items):
@@ -122,6 +127,8 @@ class RouteSearch(Search):
             loss = self.loss + sell_loss(sold)
             if (sold and not self.allow_sell) or cost(items) + loss > self.cap:
                 value = -1.0
+            elif set(sold) & self.final_set or set(items) & self.banned:
+                value = -1.0      # sells a final-build item, or re-buys a sold one
             elif (self.end_budget is not None
                   and loss + sell_loss(transition(items, self.final)[0]) > self.end_budget):
                 value = -1.0      # could no longer finish the final build by END_NET_WORTH
@@ -153,7 +160,8 @@ def beam_route(hero, objective, O, rng, width=3, allow_sell=True):
         nxt = {}
         for value, builds, scores, loss in beams:
             prev = builds[-1] if builds else []
-            s = RouteSearch(hero, nw, ref, objective, pool, rng, prev, loss, allow_sell, final)
+            banned = {x for a, b in zip(builds, builds[1:]) for x in transition(a, b)[0]}
+            s = RouteSearch(hero, nw, ref, objective, pool, rng, prev, loss, allow_sell, final, banned)
             for seed in [prev] + seeds:
                 start = sorted(set(prev) | set(seed), key=lambda n: (-ITEMS[n]["cost"], n))
                 items, sc = s.climb(s.greedy(start)[0])
@@ -267,7 +275,7 @@ def _stats(hero, owned, nw, objective, O, level):
 def item_steps(hero, targets, objective, O):
     """targets: [(label, checkpoint net worth or None, build, ability tiers)]."""
     owned, cash, earned, loss = [], 0.0, 0.0, 0.0
-    steps, checkpoints = [], []
+    steps, checkpoints, ever_sold = [], [], set()
     for label, nw, target, level in targets:
         level = tuple(level)
         sold, consumed = transition(owned, target)
@@ -279,7 +287,8 @@ def item_steps(hero, targets, objective, O):
                              "cost": ITEMS[new]["cost"] - ITEMS[consumed[new]]["cost"]})
                 continue
             comp = next((c for c in components_of(new)
-                         if c not in kept and c not in owned and c not in claimed), None)
+                         if c not in kept and c not in owned and c not in claimed
+                         and c not in ever_sold), None)
             if comp:
                 claimed.add(comp)
                 todo.append({"kind": "buy", "item": comp, "cost": ITEMS[comp]["cost"], "for": new})
@@ -299,6 +308,7 @@ def item_steps(hero, targets, objective, O):
             choice = choice or pick_sale()
             pending.remove(choice)
             owned.remove(choice)
+            ever_sold.add(choice)
             refund = SELL_REFUND * ITEMS[choice]["cost"]
             cash += refund
             loss += ITEMS[choice]["cost"] - refund
